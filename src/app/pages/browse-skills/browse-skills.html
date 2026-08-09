@@ -1,0 +1,81 @@
+<app-navbar [isLoggedIn]="auth.isLoggedIn()" [isAdmin]="auth.isAdmin()" />
+
+<div class="browse-layout page-container">
+  <aside class="sidebar card">
+    <h3>Filters</h3>
+
+    <div class="filter-group">
+      <h4>Category</h4>
+      @for (cat of categories; track cat.id) {
+        <label class="filter-check">
+          <mat-checkbox
+            [checked]="selectedCategories.includes(cat.id)"
+            (change)="toggleCategory(cat.id, $event.checked)"
+          >{{ cat.name }}</mat-checkbox>
+        </label>
+      }
+    </div>
+
+    <div class="filter-group">
+      <h4>Experience Level</h4>
+      <mat-radio-group [(ngModel)]="experienceLevel" (change)="applyFilters()">
+        <mat-radio-button value="">All Levels</mat-radio-button>
+        <mat-radio-button value="Beginner">Beginner</mat-radio-button>
+        <mat-radio-button value="Intermediate">Intermediate</mat-radio-button>
+        <mat-radio-button value="Advanced">Advanced</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <div class="filter-group">
+      <h4>Availability</h4>
+      <mat-slide-toggle [(ngModel)]="onlineOnly" (change)="applyFilters()">Online only</mat-slide-toggle>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div class="toolbar">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput placeholder="Search teachers or skills..." [(ngModel)]="searchQuery" (input)="applyFilters()" />
+      </mat-form-field>
+      <select class="sort-select" [(ngModel)]="sortBy" (change)="applyFilters()">
+        <option value="rating">Highest Rated</option>
+        <option value="credits-low">Credits: Low to High</option>
+        <option value="credits-high">Credits: High to Low</option>
+      </select>
+    </div>
+
+    <div class="teachers-grid">
+      @for (teacher of filteredTeachers; track teacher.id) {
+        <mat-card class="teacher-card" (click)="goToProfile(teacher.id, $event)">
+          <div class="teacher-header">
+            <img [src]="teacher.photo" [alt]="teacher.name" class="teacher-photo" />
+            @if (teacher.isOnline) {
+              <span class="online-dot"></span>
+            }
+          </div>
+          <mat-card-content>
+            <h3>{{ teacher.name }}</h3>
+            <span class="skill-tag">{{ teacher.skill }}</span>
+            <div class="teacher-meta">
+              <span class="rating">⭐ {{ teacher.rating }}</span>
+              <span class="credits">{{ teacher.creditsRequired }} credits</span>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-flat-button class="btn-primary request-btn" (click)="requestSession(teacher.id, $event)">
+              Request Session
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      } @empty {
+        <div class="empty-state">
+          <mat-icon>search_off</mat-icon>
+          <p>No teachers found matching your filters.</p>
+        </div>
+      }
+    </div>
+  </main>
+</div>
+
+<app-footer />

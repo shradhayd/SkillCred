@@ -1,0 +1,116 @@
+.booking-page {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.teacher-summary {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.teacher-photo {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.skill-tag {
+  color: var(--primary-purple);
+  font-weight: 500;
+}
+
+.rating {
+  color: #d69e2e;
+  margin-top: 0.25rem;
+}
+
+.booking-layout {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.booking-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.booking-main h3,
+.booking-sidebar h3 {
+  margin-bottom: 1rem;
+}
+
+.time-slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.time-pill {
+  padding: 0.5rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 24px;
+  background: #fff;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.time-pill:hover {
+  border-color: var(--primary-teal);
+}
+
+.time-pill.selected {
+  background: var(--primary-teal);
+  color: #fff;
+  border-color: var(--primary-teal);
+}
+
+.full-width {
+  width: 100%;
+}
+
+.booking-sidebar {
+  width: 300px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 80px;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.detail-item span {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.detail-item .credits {
+  color: var(--primary-teal);
+}
+
+.confirm-btn {
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 0.75rem !important;
+}
+
+.not-found {
+  text-align: center;
+  padding: 3rem;
+}
+
+@media (max-width: 768px) {
+  .booking-layout { flex-direction: column; }
+  .booking-sidebar { width: 100%; position: static; }
+}

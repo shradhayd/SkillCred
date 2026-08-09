@@ -1,1 +1,141 @@
-/* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/azure-blue.css';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+  --primary-teal: #1D9E75;
+  --primary-purple: #7F77DD;
+  --accent-coral: #D85A30;
+  --gradient-primary: linear-gradient(135deg, #1D9E75 0%, #7F77DD 100%);
+  --navy-dark: #1a1f36;
+  --text-dark: #2d3748;
+  --text-muted: #718096;
+  --bg-light: #f7f9fc;
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --card-radius: 12px;
+  --font-main: 'Inter', 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-main);
+  color: var(--text-dark);
+  background: var(--bg-light);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.card {
+  background: #fff;
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  padding: 1.5rem;
+}
+
+.btn-primary {
+  background: var(--accent-coral) !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  padding: 0.5rem 1.25rem !important;
+}
+
+.btn-primary:hover {
+  background: #c04e28 !important;
+}
+
+.btn-outline {
+  border: 2px solid var(--accent-coral) !important;
+  color: var(--accent-coral) !important;
+  background: transparent !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+}
+
+.gradient-hero {
+  background: var(--gradient-primary);
+  color: #fff;
+}
+
+.gradient-cta {
+  background: var(--gradient-primary);
+  color: #fff;
+  border-radius: var(--card-radius);
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.chip-teach {
+  background: rgba(29, 158, 117, 0.15);
+  color: var(--primary-teal);
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.chip-learn {
+  background: rgba(127, 119, 221, 0.15);
+  color: var(--primary-purple);
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-upcoming { background: #ebf8ff; color: #3182ce; }
+.status-completed { background: #f0fff4; color: #38a169; }
+.status-cancelled { background: #fff5f5; color: #e53e3e; }
+.status-pending { background: #fefcbf; color: #d69e2e; }
+.status-resolved { background: #f0fff4; color: #38a169; }
+.status-open { background: #fff5f5; color: #e53e3e; }
+
+.icon-box {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.icon-box-teal { background: rgba(29, 158, 117, 0.15); }
+.icon-box-purple { background: rgba(127, 119, 221, 0.15); }
+.icon-box-coral { background: rgba(216, 90, 48, 0.15); }
+.icon-box-blue { background: rgba(49, 130, 206, 0.15); }
+.icon-box-pink { background: rgba(237, 100, 166, 0.15); }
+
+.mat-mdc-raised-button.btn-primary,
+.mat-mdc-unelevated-button.btn-primary {
+  --mdc-protected-button-container-color: var(--accent-coral);
+  --mdc-filled-button-container-color: var(--accent-coral);
+}

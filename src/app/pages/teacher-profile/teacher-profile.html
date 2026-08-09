@@ -1,0 +1,84 @@
+<app-navbar [isLoggedIn]="auth.isLoggedIn()" [isAdmin]="auth.isAdmin()" />
+
+<div class="page-container profile-page">
+  @if (teacher) {
+    <div class="profile-header card">
+      <img [src]="teacher.photo" [alt]="teacher.name" class="profile-photo" />
+      <div class="profile-info">
+        <h1>{{ teacher.name }}</h1>
+        <div class="rating-row">
+          <span>⭐ {{ teacher.rating }}</span>
+          @if (teacher.isOnline) {
+            <span class="online-badge">Online</span>
+          }
+        </div>
+        <p class="bio">{{ teacher.bio }}</p>
+        <a [routerLink]="['/booking', teacher.id]" mat-flat-button class="btn-primary book-btn">
+          <mat-icon>event</mat-icon> Book a Session
+        </a>
+      </div>
+    </div>
+
+    <div class="skills-row">
+      <div class="skills-section card">
+        <h3>Skills I Teach</h3>
+        <div class="chips">
+          @for (skill of teacher.skillsTeach; track skill) {
+            <span class="chip-teach">{{ skill }}</span>
+          }
+        </div>
+      </div>
+      <div class="skills-section card">
+        <h3>Skills I Want to Learn</h3>
+        <div class="chips">
+          @for (skill of teacher.skillsLearn; track skill) {
+            <span class="chip-learn">{{ skill }}</span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="session-info-card card">
+      <span><strong>{{ teacher.skill }}</strong></span>
+      <span>{{ teacher.creditsRequired }} credits per session</span>
+      <span>{{ teacher.experienceLevel }} level</span>
+    </div>
+
+    <mat-tab-group class="profile-tabs">
+      <mat-tab label="Reviews">
+        <div class="tab-content">
+          @for (review of reviews; track review.id) {
+            <div class="review-item card">
+              <div class="review-header">
+                <strong>{{ review.reviewerName }}</strong>
+                <span>{{ '⭐'.repeat(review.rating) }}</span>
+                <small>{{ review.date }}</small>
+              </div>
+              <p>{{ review.comment }}</p>
+            </div>
+          }
+        </div>
+      </mat-tab>
+      <mat-tab label="Session History">
+        <div class="tab-content">
+          @for (session of sessions.slice(0, 3); track session.id) {
+            <div class="session-item card">
+              <div class="session-info">
+                <strong>{{ session.skill }}</strong>
+                <span>{{ session.date }} · {{ session.timeSlot }}</span>
+              </div>
+              <span class="status-badge" [class]="'status-' + session.status">{{ session.status }}</span>
+            </div>
+          }
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  } @else {
+    <div class="not-found card">
+      <h2>Teacher not found</h2>
+      <a routerLink="/browse-skills" mat-flat-button class="btn-primary">Browse Skills</a>
+    </div>
+  }
+</div>
+
+<app-footer />

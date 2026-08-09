@@ -1,0 +1,27 @@
+<app-navbar [isLoggedIn]="auth.isLoggedIn()" [isAdmin]="auth.isAdmin()" />
+
+<div class="page-container session-page">
+  <h1>Session History</h1>
+  <p class="subtitle">View your past and upcoming sessions</p>
+
+  <div class="sessions-table card">
+    <div class="table-header">
+      <span>Skill</span>
+      <span>Date</span>
+      <span>With</span>
+      <span>Credits</span>
+      <span>Status</span>
+    </div>
+    @for (session of sessions; track session.id) {
+      <div class="table-row" (click)="openDetail(session)">
+        <span class="skill-col">{{ session.skill }}</span>
+        <span>{{ session.date }}</span>
+        <span>{{ session.withWhom }}</span>
+        <span>{{ session.credits }}</span>
+        <span class="status-badge" [class]="'status-' + session.status">{{ session.status }}</span>
+      </div>
+    }
+  </div>
+</div>
+
+<app-footer />

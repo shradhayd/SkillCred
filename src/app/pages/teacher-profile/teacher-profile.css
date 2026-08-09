@@ -1,0 +1,35 @@
+@import '../my-profile/my-profile.css';
+
+.online-badge {
+  background: #f0fff4;
+  color: #38a169;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: 0.75rem;
+}
+
+.book-btn mat-icon {
+  margin-right: 4px;
+}
+
+.session-info-card {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.session-info-card span {
+  color: var(--text-muted);
+}
+
+.not-found {
+  text-align: center;
+  padding: 3rem;
+}
+
+.not-found h2 {
+  margin-bottom: 1rem;
+}

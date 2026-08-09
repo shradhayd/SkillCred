@@ -1,0 +1,63 @@
+<app-navbar [isLoggedIn]="auth.isLoggedIn()" [isAdmin]="auth.isAdmin()" />
+
+<div class="page-container wallet-page">
+  <div class="balance-card gradient-hero card">
+    <span class="balance-label">Current Balance</span>
+    <span class="balance-amount">{{ auth.currentUser()?.credits }} credits</span>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card card">
+      <mat-icon>trending_up</mat-icon>
+      <div>
+        <span class="stat-label">Credits Earned</span>
+        <span class="stat-value earned">+{{ creditsEarned }}</span>
+      </div>
+    </div>
+    <div class="stat-card card">
+      <mat-icon>trending_down</mat-icon>
+      <div>
+        <span class="stat-label">Credits Spent</span>
+        <span class="stat-value spent">-{{ creditsSpent }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-card card">
+    <h3>6-Month Trend</h3>
+    <div class="css-chart">
+      @for (item of chartData; track item.month) {
+        <div class="chart-group">
+          <div class="bars">
+            <div class="bar earned" [style.height.%]="(item.earned / maxChartValue) * 100"></div>
+            <div class="bar spent" [style.height.%]="(item.spent / maxChartValue) * 100"></div>
+          </div>
+          <span class="chart-label">{{ item.month }}</span>
+        </div>
+      }
+    </div>
+    <div class="chart-legend">
+      <span><span class="dot earned"></span> Earned</span>
+      <span><span class="dot spent"></span> Spent</span>
+    </div>
+  </div>
+
+  <div class="transactions-section">
+    <h3>Recent Transactions</h3>
+    <div class="transactions-list card">
+      @for (tx of transactions; track tx.id) {
+        <div class="tx-row" (click)="openDetail(tx)">
+          <div class="tx-info">
+            <strong>{{ tx.skill }}</strong>
+            <span>{{ tx.date }} · {{ tx.withWhom }}</span>
+          </div>
+          <span class="tx-credits" [class.earned]="tx.type === 'earned'" [class.spent]="tx.type === 'spent'">
+            {{ tx.type === 'earned' ? '+' : '-' }}{{ tx.credits }}
+          </span>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+<app-footer />
