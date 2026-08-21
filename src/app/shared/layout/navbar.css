@@ -86,7 +86,17 @@
 }
 
 @media (max-width: 768px) {
+  .navbar-inner {
+    flex-wrap: wrap;
+  }
   .nav-links {
-    display: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
   }
 }
