@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # MinorProject
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.2.
@@ -57,3 +58,6 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+=======
+# SkillCred
+>>>>>>> 527a88479fc3bfd84bbcebd84145dcef9eb01af2
