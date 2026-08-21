@@ -1,0 +1,144 @@
+<app-navbar [isLoggedIn]="auth.isLoggedIn()" [isAdmin]="auth.isAdmin()" />
+
+<!-- ══════════ 3D HERO SLIDER ══════════ -->
+<div class="cu-hero" [attr.data-slide]="currentSlide.bg">
+  <div class="cu-mesh" aria-hidden="true"></div>
+  <div class="cu-orb cu-orb1" aria-hidden="true"></div>
+  <div class="cu-orb cu-orb2" aria-hidden="true"></div>
+
+  <!-- 3D Rotating Cube -->
+  <div class="cu-cube3d" aria-hidden="true">
+    <div class="cu-face cf"></div><div class="cu-face cb"></div>
+    <div class="cu-face cl"></div><div class="cu-face cr"></div>
+    <div class="cu-face ct"></div><div class="cu-face cbt"></div>
+  </div>
+  <div class="cu-ring3d" aria-hidden="true"></div>
+
+  <!-- Slide content -->
+  <div class="cu-slide-content">
+    <div class="cu-emoji animate-pop3d">{{ currentSlide.emoji }}</div>
+    <h1 class="animate-slide-3d">{{ currentSlide.heading }}</h1>
+    <p  class="animate-slide-3d anim-d1">{{ currentSlide.sub }}</p>
+  </div>
+
+  <button class="cu-arrow cu-arrow-l" (click)="prevSlide()"><mat-icon>chevron_left</mat-icon></button>
+  <button class="cu-arrow cu-arrow-r" (click)="nextSlide()"><mat-icon>chevron_right</mat-icon></button>
+
+  <div class="cu-dots">
+    @for (s of heroSlides; track s.bg; let i = $index) {
+      <button class="cu-dot" [class.active]="slideIndex()===i" (click)="goSlide(i)"></button>
+    }
+  </div>
+</div>
+
+<!-- ══════════ CHANNELS BAR ══════════ -->
+<div class="cu-channels">
+  <div class="page-container cu-channels-inner">
+    @for (ch of [{ico:'📧',lbl:'Email',val:'support@skillcred.com',href:'mailto:support@skillcred.com'},{ico:'💬',lbl:'Live Chat',val:'Mon–Fri 9AM–6PM IST',href:null},{ico:'🐦',lbl:'Twitter / X',val:'@skillcred',href:'https://twitter.com/skillcred'},{ico:'⏱️',lbl:'Response',val:'Under 24 hours',href:null}]; track ch.lbl; let i = $index) {
+      <div class="cu-channel reveal-flip-x" [style.--i]="i">
+        <span class="cu-ch-ico">{{ ch.ico }}</span>
+        <div>
+          <strong>{{ ch.lbl }}</strong>
+          @if (ch.href) { <a [href]="ch.href" target="_blank" rel="noopener">{{ ch.val }}</a> }
+          @else { <span>{{ ch.val }}</span> }
+        </div>
+      </div>
+      @if (i < 3) { <div class="cu-ch-div"></div> }
+    }
+  </div>
+</div>
+
+<!-- ══════════ MAIN LAYOUT ══════════ -->
+<div class="cu-layout page-container">
+
+  <!-- 3D Form Panel -->
+  <div class="cu-form-card reveal-left">
+    <h2 class="animate-flip-x">Send Us a Message</h2>
+    <p class="cu-form-sub">Fill in the form and we'll reply within 24 hours.</p>
+
+    @if (!submitted()) {
+      <form class="cu-form" (ngSubmit)="submitForm()">
+        <mat-form-field appearance="outline" class="cu-field">
+          <mat-label>Your Name</mat-label>
+          <mat-icon matPrefix>person</mat-icon>
+          <input matInput [(ngModel)]="name" name="name" placeholder="e.g. Shradha Kumar" required />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="cu-field">
+          <mat-label>Email Address</mat-label>
+          <mat-icon matPrefix>email</mat-icon>
+          <input matInput type="email" [(ngModel)]="email" name="email" placeholder="you@example.com" required />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="cu-field">
+          <mat-label>Category</mat-label>
+          <mat-icon matPrefix>category</mat-icon>
+          <mat-select [(ngModel)]="category" name="category">
+            @for (cat of categories; track cat) { <mat-option [value]="cat">{{ cat }}</mat-option> }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="cu-field">
+          <mat-label>Subject</mat-label>
+          <mat-icon matPrefix>subject</mat-icon>
+          <input matInput [(ngModel)]="subject" name="subject" placeholder="Brief description" required />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="cu-field">
+          <mat-label>Message</mat-label>
+          <textarea matInput [(ngModel)]="message" name="message" rows="5" placeholder="Tell us more..." required></textarea>
+          <mat-hint>Be as detailed as possible — it helps us respond faster.</mat-hint>
+        </mat-form-field>
+        <button mat-flat-button type="submit" class="btn-primary cu-submit-btn" [disabled]="!name||!email||!subject||!message">
+          <mat-icon>send</mat-icon> Send Message
+        </button>
+      </form>
+    } @else {
+      <div class="cu-success">
+        <div class="cu-success-ico animate-pop3d">✅</div>
+        <h3 class="animate-flip-x">Message Sent!</h3>
+        <p>Thanks <strong>{{ name }}</strong>! We'll reply to <strong>{{ email }}</strong> within 24 hours.</p>
+        <p class="cu-ticket">Ref: <code>{{ ticketRef() }}</code></p>
+        <button mat-stroked-button (click)="resetForm()">Send Another</button>
+      </div>
+    }
+  </div>
+
+  <!-- Aside -->
+  <aside class="cu-aside">
+    <div class="cu-aside-card reveal-right" style="--i:0">
+      <h3><mat-icon>bolt</mat-icon> Quick Help</h3>
+      @for (lnk of [{ico:'🎓',t:'How It Works',d:'Learn about skill exchange',r:'/how-it-works'},{ico:'🔍',t:'Browse Skills',d:'Find your next teacher',r:'/browse-skills'},{ico:'🔐',t:'Privacy Policy',d:'How we handle your data',r:'/privacy-policy'},{ico:'📋',t:'Terms of Service',d:'Platform rules & guidelines',r:'/terms-of-service'}]; track lnk.t) {
+        <a [routerLink]="lnk.r" class="cu-qlink">
+          <span>{{ lnk.ico }}</span>
+          <div><strong>{{ lnk.t }}</strong><p>{{ lnk.d }}</p></div>
+          <mat-icon>chevron_right</mat-icon>
+        </a>
+      }
+    </div>
+    <div class="cu-aside-card reveal-right" style="--i:1">
+      <h3><mat-icon>location_on</mat-icon> Our Office</h3>
+      <div class="cu-office">
+        <p>📍 SkillCred Inc., 123 Skill Street, Suite 400<br/>Tech City, TC 10001, USA</p>
+        <p>🕘 Mon–Fri: 9AM–6PM IST · Sat: 10AM–2PM</p>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- ══════════ 3D FAQ ══════════ -->
+<div class="cu-faq page-container">
+  <h2 class="reveal-flip-x">Frequently Asked Questions</h2>
+  <p class="cu-faq-sub reveal-up">Can't find what you're looking for? Send us a message above.</p>
+  <div class="cu-faq-list">
+    @for (faq of faqs; track faq.q; let i = $index) {
+      <div class="cu-faq-item reveal-up" [class.open]="openFaq===i" [style.--i]="i">
+        <button class="cu-faq-q" (click)="toggleFaq(i)">
+          <span>{{ faq.q }}</span>
+          <mat-icon>{{ openFaq===i ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </button>
+        @if (openFaq===i) {
+          <div class="cu-faq-a">{{ faq.a }}</div>
+        }
+      </div>
+    }
+  </div>
+</div>
+
+<app-footer />

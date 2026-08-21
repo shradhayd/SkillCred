@@ -1,0 +1,138 @@
+<app-navbar [isLoggedIn]="auth.isLoggedIn()" [isAdmin]="auth.isAdmin()" />
+
+<!-- ══════════ 3D HERO ══════════ -->
+<div class="pp-hero">
+  <div class="pp-mesh" aria-hidden="true"></div>
+  <div class="pp-orb pp-orb1" aria-hidden="true"></div>
+  <div class="pp-orb pp-orb2" aria-hidden="true"></div>
+  <div class="pp-ring3d"    aria-hidden="true"></div>
+  <div class="pp-diamond3d" aria-hidden="true"></div>
+  <div class="pp-hero-inner">
+    <span class="pp-badge animate-fade-down">Privacy</span>
+    <div class="pp-hero-icon animate-pop3d">🛡️</div>
+    <h1 class="animate-slide-3d">Privacy Policy</h1>
+    <p  class="animate-slide-3d anim-d2">We respect your privacy and are committed to protecting your personal data.</p>
+    <span class="pp-updated animate-fade-up anim-d3">Last updated: {{ lastUpdated }}</span>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="pp-layout page-container">
+  <aside class="pp-toc">
+    <p class="pp-toc-title">Contents</p>
+    <nav>
+      <a href="#pp1">1. Information We Collect</a><a href="#pp2">2. How We Use Your Data</a>
+      <a href="#pp3">3. Sharing Your Information</a><a href="#pp4">4. Cookies</a>
+      <a href="#pp5">5. Data Retention</a><a href="#pp6">6. Your Rights</a>
+      <a href="#pp7">7. Security</a><a href="#pp8">8. Children's Privacy</a>
+      <a href="#pp9">9. Policy Changes</a><a href="#pp10">10. Contact</a>
+    </nav>
+  </aside>
+
+  <main class="pp-body">
+
+    <section id="pp1" class="pp-section reveal-up">
+      <span class="pp-num">01</span><h2>Information We Collect</h2>
+      <p>We collect information you provide when creating an account, completing your profile, booking sessions, or communicating with other users:</p>
+      <ul>
+        <li><strong>Account Information:</strong> Name, email address, and password.</li>
+        <li><strong>Profile Information:</strong> Skills, bio, and profile photo.</li>
+        <li><strong>Transaction Data:</strong> Credits earned and spent, session history.</li>
+        <li><strong>Communications:</strong> Messages exchanged through the platform.</li>
+        <li><strong>Usage Data:</strong> Pages visited, features used, and interactions.</li>
+        <li><strong>Device Information:</strong> Browser type, OS, and IP address.</li>
+      </ul>
+    </section>
+
+    <section id="pp2" class="pp-section reveal-up">
+      <span class="pp-num">02</span><h2>How We Use Your Data</h2>
+      <div class="pp-use-grid">
+        @for (c of [{e:'🔐',t:'Account Management',d:'Create and manage your account, authenticate you, and keep it secure.'},{e:'🤝',t:'Skill Matching',d:'Connect you with teachers or learners whose skills match your needs.'},{e:'💬',t:'Communication',d:'Send session reminders, platform updates, and support responses.'},{e:'📊',t:'Analytics',d:'Understand platform usage and continuously improve user experience.'}]; track c.t; let i = $index) {
+          <div class="pp-use-card reveal-scale" [style.--i]="i">
+            <span>{{ c.e }}</span><h4>{{ c.t }}</h4><p>{{ c.d }}</p>
+          </div>
+        }
+      </div>
+    </section>
+
+    <section id="pp3" class="pp-section reveal-up">
+      <span class="pp-num">03</span><h2>Sharing Your Information</h2>
+      <p>We do not sell, trade, or rent your personal information. We share data only in these circumstances:</p>
+      <ul>
+        <li><strong>With Other Users:</strong> Your public profile is visible to other platform members.</li>
+        <li><strong>Service Providers:</strong> Trusted vendors who help operate our platform, bound by confidentiality agreements.</li>
+        <li><strong>Legal Requirements:</strong> When required by law or government authority.</li>
+        <li><strong>Business Transfers:</strong> In the event of a merger, acquisition, or asset sale.</li>
+      </ul>
+      <div class="pp-highlight reveal-up">
+        <span>✅</span><p>We will never sell your personal data to advertisers or data brokers.</p>
+      </div>
+    </section>
+
+    <section id="pp4" class="pp-section reveal-up">
+      <span class="pp-num">04</span><h2>Cookies</h2>
+      <table class="pp-table">
+        <thead><tr><th>Type</th><th>Purpose</th><th>Duration</th></tr></thead>
+        <tbody>
+          <tr><td>Essential</td><td>Session management and authentication</td><td>Session</td></tr>
+          <tr><td>Functional</td><td>Remember preferences and settings</td><td>1 year</td></tr>
+          <tr><td>Analytics</td><td>Understand user interactions</td><td>2 years</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="pp5" class="pp-section reveal-up">
+      <span class="pp-num">05</span><h2>Data Retention</h2>
+      <ul>
+        <li>Account data retained for the lifetime of your account plus 90 days after deletion.</li>
+        <li>Transaction records kept for 3 years for legal compliance.</li>
+        <li>Chat messages retained for 1 year, then permanently deleted.</li>
+        <li>Backup copies may persist for up to 30 days after deletion from active systems.</li>
+      </ul>
+    </section>
+
+    <section id="pp6" class="pp-section reveal-up">
+      <span class="pp-num">06</span><h2>Your Rights</h2>
+      <div class="pp-rights-grid">
+        @for (r of [{e:'👁️',t:'Access',d:'Request a copy of your personal data.'},{e:'✏️',t:'Correction',d:'Request correction of inaccurate data.'},{e:'🗑️',t:'Deletion',d:'Request deletion of your data.'},{e:'🚫',t:'Objection',d:'Object to specific processing purposes.'},{e:'📦',t:'Portability',d:'Receive your data in machine-readable format.'},{e:'⏸️',t:'Restriction',d:'Request restriction of processing.'}]; track r.t; let i = $index) {
+          <div class="pp-right-card reveal-scale" [style.--i]="i">
+            <span>{{ r.e }}</span><strong>{{ r.t }}</strong><p>{{ r.d }}</p>
+          </div>
+        }
+      </div>
+      <p>To exercise these rights, contact us at <a href="mailto:privacy@skillcred.com">privacy&#64;skillcred.com</a>.</p>
+    </section>
+
+    <section id="pp7" class="pp-section reveal-up">
+      <span class="pp-num">07</span><h2>Security</h2>
+      <p>We implement TLS/SSL encryption, bcrypt password hashing, regular security audits, access controls, and automated monitoring for suspicious activity. While we take every reasonable precaution, no internet transmission is 100% secure — please use a strong, unique password.</p>
+    </section>
+
+    <section id="pp8" class="pp-section reveal-up">
+      <span class="pp-num">08</span><h2>Children's Privacy</h2>
+      <p>SkillCred is not directed at children under 13. We do not knowingly collect information from children under 13. If you believe a child has provided us with their information, contact us immediately.</p>
+    </section>
+
+    <section id="pp9" class="pp-section reveal-up">
+      <span class="pp-num">09</span><h2>Policy Changes</h2>
+      <p>We may update this Privacy Policy from time to time. When we make significant changes, we will notify you via email or a prominent notice on the platform. Continued use of SkillCred after changes constitutes your acceptance.</p>
+    </section>
+
+    <section id="pp10" class="pp-section reveal-up">
+      <span class="pp-num">10</span><h2>Contact</h2>
+      <div class="pp-contact-box">
+        <div class="pp-contact-row"><span>📧</span><div><strong>Email</strong><a href="mailto:privacy@skillcred.com">privacy&#64;skillcred.com</a></div></div>
+        <div class="pp-contact-row"><span>📍</span><div><strong>Address</strong><span>SkillCred Inc., 123 Skill Street, Tech City, TC 10001</span></div></div>
+        <div class="pp-contact-row"><span>⏱️</span><div><strong>Response Time</strong><span>We respond within 72 hours</span></div></div>
+      </div>
+    </section>
+
+    <div class="pp-page-nav reveal-up">
+      <a routerLink="/terms-of-service" class="pp-nav-link">Terms of Service →</a>
+      <a routerLink="/contact-us"       class="pp-nav-link">Contact Us →</a>
+    </div>
+
+  </main>
+</div>
+
+<app-footer />

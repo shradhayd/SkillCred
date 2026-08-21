@@ -1,0 +1,385 @@
+<app-navbar [isLoggedIn]="auth.isLoggedIn()" [isAdmin]="auth.isAdmin()" />
+
+<div class="up-shell">
+
+  <!-- =====================================================
+       SIDEBAR
+  ===================================================== -->
+  <aside class="up-sidebar">
+
+    <!-- Profile card -->
+    <div class="up-profile-card">
+      <img
+        [src]="auth.currentUser()?.photo || 'https://i.pravatar.cc/150?u=default'"
+        [alt]="auth.currentUser()?.name"
+        class="up-avatar"
+      />
+      <h3>{{ auth.currentUser()?.name }}</h3>
+      <p class="up-email">{{ auth.currentUser()?.email }}</p>
+      <div class="up-credit-badge">
+        <mat-icon>account_balance_wallet</mat-icon>
+        {{ auth.currentUser()?.credits }} credits
+      </div>
+      <div class="up-rating-row">
+        <mat-icon>star</mat-icon>
+        {{ auth.currentUser()?.rating }} rating
+      </div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="up-nav">
+      <button class="up-nav-item" [class.active]="activeTab() === 'overview'"      (click)="setTab('overview')">
+        <mat-icon>dashboard</mat-icon> Overview
+      </button>
+      <button class="up-nav-item" [class.active]="activeTab() === 'sessions'"      (click)="setTab('sessions')">
+        <mat-icon>event</mat-icon> My Sessions
+      </button>
+      <button class="up-nav-item" [class.active]="activeTab() === 'credits'"       (click)="setTab('credits')">
+        <mat-icon>account_balance_wallet</mat-icon> Credits
+      </button>
+      <button class="up-nav-item" [class.active]="activeTab() === 'notifications'" (click)="setTab('notifications')">
+        <mat-icon>notifications</mat-icon> Notifications
+        @if (unreadCount() > 0) {
+          <span class="up-nav-badge">{{ unreadCount() }}</span>
+        }
+      </button>
+    </nav>
+
+    <!-- Quick actions -->
+    <div class="up-quick-section">
+      <p class="up-qa-heading">Quick Actions</p>
+      @for (action of quickActions; track action.route) {
+        <a [routerLink]="action.route" class="up-qa-link" [attr.data-color]="action.color">
+          <mat-icon>{{ action.icon }}</mat-icon>
+          <span>{{ action.label }}</span>
+        </a>
+      }
+    </div>
+
+  </aside>
+
+  <!-- =====================================================
+       MAIN
+  ===================================================== -->
+  <main class="up-main">
+
+    <!-- ================================================
+         OVERVIEW
+    ================================================ -->
+    @if (activeTab() === 'overview') {
+
+      <!-- Welcome banner -->
+      <div class="up-welcome">
+        <div>
+          <h2>Welcome back, {{ auth.currentUser()?.name }}! 👋</h2>
+          <p>Here's what's happening with your account today.</p>
+        </div>
+        <a routerLink="/browse-skills" mat-flat-button class="btn-primary up-welcome-btn">
+          <mat-icon>search</mat-icon> Find a Teacher
+        </a>
+      </div>
+
+      <!-- Stat cards -->
+      <div class="up-stat-grid">
+        @for (card of statCards(); track card.label) {
+          <div class="up-stat-card" [attr.data-color]="card.color">
+            <div class="up-stat-icon"><mat-icon>{{ card.icon }}</mat-icon></div>
+            <div class="up-stat-body">
+              <span class="up-stat-label">{{ card.label }}</span>
+              <span class="up-stat-value">{{ card.value }}</span>
+              <span class="up-stat-suffix">{{ card.suffix }}</span>
+              <span class="up-stat-delta" [class.up]="card.trend === 'up'" [class.neutral]="card.trend === 'neutral'">
+                @if (card.trend === 'up')      { <mat-icon>trending_up</mat-icon> }
+                @if (card.trend === 'neutral') { <mat-icon>schedule</mat-icon> }
+                {{ card.delta }}
+              </span>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Two-col row -->
+      <div class="up-row">
+
+        <!-- Upcoming sessions -->
+        <div class="up-panel">
+          <div class="up-panel-hdr">
+            <h3><mat-icon>event</mat-icon> Upcoming Sessions</h3>
+            <button mat-button class="up-link-btn" (click)="setTab('sessions')">See all</button>
+          </div>
+          @if (upcomingSessions().length === 0) {
+            <div class="up-empty">
+              <span>📅</span>
+              <p>No upcoming sessions. <a routerLink="/browse-skills">Find a teacher →</a></p>
+            </div>
+          } @else {
+            <div class="up-session-list">
+              @for (s of upcomingSessions(); track s.id) {
+                <div class="up-session-item">
+                  <div class="up-session-icon" [attr.data-role]="s.role">
+                    <mat-icon>{{ s.role === 'teacher' ? 'school' : 'person' }}</mat-icon>
+                  </div>
+                  <div class="up-session-meta">
+                    <strong>{{ s.skill }}</strong>
+                    <span>{{ s.role === 'teacher' ? 'Teaching' : 'Learning' }} with {{ s.withWhom }}</span>
+                    <span class="up-session-date">📅 {{ s.date }} · {{ s.timeSlot }}</span>
+                  </div>
+                  <span class="up-session-cred" [class.earned]="s.role === 'teacher'" [class.spent]="s.role === 'student'">
+                    {{ s.role === 'teacher' ? '+' : '−' }}{{ s.credits }}
+                  </span>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Skills -->
+        <div class="up-panel">
+          <div class="up-panel-hdr">
+            <h3><mat-icon>local_library</mat-icon> Your Skills</h3>
+            <a routerLink="/my-profile" mat-button class="up-link-btn">Edit</a>
+          </div>
+          <div class="up-skills-group">
+            <p class="up-skills-label">I Teach</p>
+            <div class="up-chips">
+              @for (skill of (auth.currentUser()?.skillsTeach || []); track skill) {
+                <span class="up-chip teach">{{ skill }}</span>
+              }
+            </div>
+          </div>
+          <div class="up-skills-group">
+            <p class="up-skills-label">I Want to Learn</p>
+            <div class="up-chips">
+              @for (skill of (auth.currentUser()?.skillsLearn || []); track skill) {
+                <span class="up-chip learn">{{ skill }}</span>
+              }
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Credit chart -->
+      <div class="up-panel up-chart-panel">
+        <div class="up-panel-hdr">
+          <h3><mat-icon>bar_chart</mat-icon> Credit Activity (Last 6 Months)</h3>
+          <button mat-button class="up-link-btn" (click)="setTab('credits')">Full History</button>
+        </div>
+        <div class="up-chart">
+          @for (d of chartData; track d.month) {
+            <div class="up-chart-col">
+              <div class="up-bars-wrap">
+                <div class="up-bar up-earned-bar" [style.height.%]="(d.earned / maxChartValue) * 100" [title]="'Earned: ' + d.earned"></div>
+                <div class="up-bar up-spent-bar"  [style.height.%]="(d.spent  / maxChartValue) * 100" [title]="'Spent: '  + d.spent"></div>
+              </div>
+              <span class="up-chart-label">{{ d.month }}</span>
+            </div>
+          }
+        </div>
+        <div class="up-chart-legend">
+          <span class="up-legend earned"><span class="up-legend-dot"></span> Earned</span>
+          <span class="up-legend spent"> <span class="up-legend-dot"></span> Spent</span>
+        </div>
+      </div>
+
+      <!-- Reviews -->
+      <div class="up-panel">
+        <div class="up-panel-hdr">
+          <h3><mat-icon>star</mat-icon> Recent Reviews</h3>
+        </div>
+        <div class="up-reviews">
+          @for (r of reviews; track r.id) {
+            <div class="up-review">
+              <div class="up-review-hdr">
+                <img [src]="'https://i.pravatar.cc/40?u=' + r.reviewerName" [alt]="r.reviewerName" class="up-review-av" />
+                <div>
+                  <strong>{{ r.reviewerName }}</strong>
+                  <span class="up-review-date">{{ r.date }}</span>
+                </div>
+                <div class="up-stars">
+                  @for (s of [1,2,3,4,5]; track s) {
+                    <mat-icon class="up-star" [class.filled]="s <= r.rating">star</mat-icon>
+                  }
+                </div>
+              </div>
+              <p class="up-review-comment">"{{ r.comment }}"</p>
+            </div>
+          }
+        </div>
+      </div>
+
+    }
+
+    <!-- ================================================
+         SESSIONS
+    ================================================ -->
+    @if (activeTab() === 'sessions') {
+
+      <div class="up-tab-hdr">
+        <h2>My Sessions</h2>
+        <a routerLink="/browse-skills" mat-flat-button class="btn-primary">
+          <mat-icon>add</mat-icon> Book a Session
+        </a>
+      </div>
+
+      <div class="up-sum-row">
+        <div class="up-sum-chip upcoming"> <mat-icon>event</mat-icon>       {{ upcomingSessions().length }} Upcoming </div>
+        <div class="up-sum-chip done">     <mat-icon>check_circle</mat-icon> {{ completedSessions().length }} Completed </div>
+        <div class="up-sum-chip cancelled"><mat-icon>cancel</mat-icon>      {{ cancelledSessions().length }} Cancelled </div>
+      </div>
+
+      <div class="up-panel up-no-pad">
+        <table class="up-table">
+          <thead>
+            <tr><th>Skill</th><th>With</th><th>Role</th><th>Date &amp; Time</th><th>Credits</th><th>Status</th><th></th></tr>
+          </thead>
+          <tbody>
+            @for (s of sessions; track s.id) {
+              <tr>
+                <td><strong>{{ s.skill }}</strong></td>
+                <td>
+                  <div class="up-user-cell">
+                    <img [src]="'https://i.pravatar.cc/40?u=' + s.withWhomId" [alt]="s.withWhom" class="up-tav" />
+                    {{ s.withWhom }}
+                  </div>
+                </td>
+                <td><span class="up-role-badge" [attr.data-role]="s.role">{{ s.role }}</span></td>
+                <td class="up-muted">{{ s.date }} · {{ s.timeSlot }}</td>
+                <td>
+                  <span class="up-cred-cell" [class.earned]="s.role === 'teacher'" [class.spent]="s.role === 'student'">
+                    {{ s.role === 'teacher' ? '+' : '−' }}{{ s.credits }}
+                  </span>
+                </td>
+                <td>
+                  <span class="up-status-pill" [attr.data-status]="s.status">
+                    <span class="up-sdot"></span>{{ s.status }}
+                  </span>
+                </td>
+                <td>
+                  @if (s.status === 'completed') { <a [routerLink]="['/profile', s.withWhomId]" mat-button class="up-link-btn">Review</a> }
+                  @if (s.status === 'upcoming')  { <a routerLink="/chat" mat-button class="up-link-btn">Chat</a> }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+    }
+
+    <!-- ================================================
+         CREDITS
+    ================================================ -->
+    @if (activeTab() === 'credits') {
+
+      <div class="up-tab-hdr">
+        <h2>Credit History</h2>
+        <a routerLink="/wallet" mat-flat-button class="btn-primary">
+          <mat-icon>account_balance_wallet</mat-icon> Open Wallet
+        </a>
+      </div>
+
+      <div class="up-credit-summary">
+        <div class="up-csum-card balance">
+          <mat-icon>account_balance_wallet</mat-icon>
+          <div><span>Current Balance</span><strong>{{ auth.currentUser()?.credits }} credits</strong></div>
+        </div>
+        <div class="up-csum-card earned">
+          <mat-icon>trending_up</mat-icon>
+          <div><span>Total Earned</span><strong>+{{ totalEarned() }} credits</strong></div>
+        </div>
+        <div class="up-csum-card spent">
+          <mat-icon>trending_down</mat-icon>
+          <div><span>Total Spent</span><strong>−{{ totalSpent() }} credits</strong></div>
+        </div>
+      </div>
+
+      <div class="up-panel up-chart-panel">
+        <div class="up-panel-hdr"><h3><mat-icon>bar_chart</mat-icon> Monthly Credit Activity</h3></div>
+        <div class="up-chart">
+          @for (d of chartData; track d.month) {
+            <div class="up-chart-col">
+              <div class="up-bars-wrap">
+                <div class="up-bar up-earned-bar" [style.height.%]="(d.earned / maxChartValue) * 100" [title]="'Earned: ' + d.earned"></div>
+                <div class="up-bar up-spent-bar"  [style.height.%]="(d.spent  / maxChartValue) * 100" [title]="'Spent: '  + d.spent"></div>
+              </div>
+              <span class="up-chart-label">{{ d.month }}</span>
+            </div>
+          }
+        </div>
+        <div class="up-chart-legend">
+          <span class="up-legend earned"><span class="up-legend-dot"></span> Earned</span>
+          <span class="up-legend spent"> <span class="up-legend-dot"></span> Spent</span>
+        </div>
+      </div>
+
+      <div class="up-panel up-no-pad">
+        <table class="up-table">
+          <thead>
+            <tr><th>Skill</th><th>With</th><th>Date</th><th>Time</th><th>Credits</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            @for (t of transactions; track t.id) {
+              <tr>
+                <td><strong>{{ t.skill }}</strong></td>
+                <td class="up-muted">{{ t.withWhom }}</td>
+                <td class="up-muted">{{ t.date }}</td>
+                <td class="up-muted">{{ t.timeSlot }}</td>
+                <td>
+                  <span class="up-cred-cell" [class.earned]="t.type === 'earned'" [class.spent]="t.type === 'spent'">
+                    {{ t.type === 'earned' ? '+' : '−' }}{{ t.credits }}
+                  </span>
+                </td>
+                <td>
+                  <span class="up-status-pill" [attr.data-status]="t.status">
+                    <span class="up-sdot"></span>{{ t.status }}
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+    }
+
+    <!-- ================================================
+         NOTIFICATIONS
+    ================================================ -->
+    @if (activeTab() === 'notifications') {
+
+      <div class="up-tab-hdr">
+        <h2>Notifications</h2>
+        @if (unreadCount() > 0) {
+          <button mat-stroked-button (click)="markAllRead()">
+            <mat-icon>done_all</mat-icon> Mark all as read
+          </button>
+        }
+      </div>
+
+      @if (notifications().length === 0) {
+        <div class="up-empty">
+          <span>🔔</span><p>You're all caught up! No notifications.</p>
+        </div>
+      } @else {
+        <div class="up-notif-list">
+          @for (n of notifications(); track n.id) {
+            <div class="up-notif" [class.unread]="!n.read" (click)="markRead(n.id)">
+              <div class="up-notif-dot" [class.active]="!n.read"></div>
+              <div class="up-notif-body">
+                <strong>{{ n.title }}</strong>
+                <p>{{ n.message }}</p>
+                <span class="up-notif-time">{{ n.time }}</span>
+              </div>
+              @if (!n.read) { <span class="up-new-badge">New</span> }
+            </div>
+          }
+        </div>
+      }
+
+    }
+
+  </main>
+</div>
+
+<app-footer />

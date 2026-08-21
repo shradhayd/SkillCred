@@ -1,0 +1,143 @@
+<nav class="navbar">
+  <div class="navbar-inner">
+
+    <!-- LOGO -->
+    <a routerLink="/home" class="logo">
+      <span class="logo-icon">⚡</span>
+      <span class="logo-text">SkillCred</span>
+    </a>
+
+    <!-- HAMBURGER (mobile) -->
+    <button class="hamburger" (click)="menuOpen = !menuOpen" aria-label="Toggle menu">
+      <mat-icon>{{ menuOpen ? 'close' : 'menu' }}</mat-icon>
+    </button>
+
+    <!-- NAV LINKS -->
+    <div class="nav-links" [class.open]="menuOpen">
+
+      <a routerLink="/home"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: true }"
+         (click)="menuOpen = false">
+        Home
+      </a>
+
+      <a routerLink="/browse-skills"
+         routerLinkActive="active"
+         (click)="menuOpen = false">
+        Browse Skills
+      </a>
+
+      <a routerLink="/how-it-works"
+         routerLinkActive="active"
+         (click)="menuOpen = false">
+        How It Works
+      </a>
+
+      @if (isLoggedIn) {
+        <a routerLink="/wallet"
+           routerLinkActive="active"
+           (click)="menuOpen = false">
+          Wallet
+        </a>
+        <a routerLink="/dashboard"
+           routerLinkActive="active"
+           (click)="menuOpen = false">
+          Dashboard
+        </a>
+      }
+
+      <!-- MORE DROPDOWN (desktop) -->
+      <div class="nav-more-wrap" (mouseenter)="moreOpen = true" (mouseleave)="moreOpen = false">
+        <button class="nav-more-btn" [class.active]="moreOpen || isMoreActive()"
+          (click)="moreOpen = !moreOpen">
+          More <mat-icon class="nav-more-chevron">expand_more</mat-icon>
+        </button>
+        <div class="nav-dropdown" [class.open]="moreOpen">
+          <a routerLink="/about-us"       class="nav-dropdown-item" (click)="moreOpen = false; menuOpen = false">
+            <mat-icon>info</mat-icon> About Us
+          </a>
+          <a routerLink="/contact-us"     class="nav-dropdown-item" (click)="moreOpen = false; menuOpen = false">
+            <mat-icon>mail</mat-icon> Contact Us
+          </a>
+          <div class="nav-dropdown-divider"></div>
+          <a routerLink="/privacy-policy" class="nav-dropdown-item" (click)="moreOpen = false; menuOpen = false">
+            <mat-icon>lock</mat-icon> Privacy Policy
+          </a>
+          <a routerLink="/terms-of-service" class="nav-dropdown-item" (click)="moreOpen = false; menuOpen = false">
+            <mat-icon>description</mat-icon> Terms of Service
+          </a>
+        </div>
+      </div>
+
+      <!-- MOBILE-ONLY: flat links instead of dropdown -->
+      <div class="nav-mobile-more">
+        <a routerLink="/about-us"         routerLinkActive="active" (click)="menuOpen = false">About Us</a>
+        <a routerLink="/contact-us"       routerLinkActive="active" (click)="menuOpen = false">Contact Us</a>
+        <a routerLink="/privacy-policy"   routerLinkActive="active" (click)="menuOpen = false">Privacy Policy</a>
+        <a routerLink="/terms-of-service" routerLinkActive="active" (click)="menuOpen = false">Terms of Service</a>
+      </div>
+
+    </div>
+
+    <!-- NAV ACTIONS -->
+    <div class="nav-actions">
+      @if (!isLoggedIn) {
+        <a routerLink="/login"  mat-stroked-button class="btn-login">Login</a>
+        <a routerLink="/signup" mat-flat-button class="btn-primary">Sign Up</a>
+      } @else {
+
+        <!-- Notifications -->
+        <button mat-icon-button [matMenuTriggerFor]="notifMenu" class="notif-btn">
+          <mat-icon [matBadge]="unreadCount" matBadgeColor="warn" [matBadgeHidden]="unreadCount === 0">
+            notifications
+          </mat-icon>
+        </button>
+        <mat-menu #notifMenu="matMenu" class="notif-menu">
+          @for (notif of notifications; track notif.id) {
+            <button mat-menu-item class="notif-item" [class.unread]="!notif.read">
+              <div class="notif-content">
+                <strong>{{ notif.title }}</strong>
+                <span>{{ notif.message }}</span>
+                <small>{{ notif.time }}</small>
+              </div>
+            </button>
+          }
+        </mat-menu>
+
+        <!-- Profile avatar -->
+        <button mat-icon-button [matMenuTriggerFor]="profileMenu" class="avatar-btn">
+          <img src="https://i.pravatar.cc/150?u=shradha" alt="Profile" class="avatar" />
+        </button>
+        <mat-menu #profileMenu="matMenu">
+          <button mat-menu-item routerLink="/dashboard">
+            <mat-icon>space_dashboard</mat-icon> My Dashboard
+          </button>
+          <button mat-menu-item routerLink="/my-profile">
+            <mat-icon>person</mat-icon> My Profile
+          </button>
+          <button mat-menu-item routerLink="/wallet">
+            <mat-icon>account_balance_wallet</mat-icon> Wallet
+          </button>
+          <button mat-menu-item routerLink="/session-history">
+            <mat-icon>history</mat-icon> Session History
+          </button>
+          <button mat-menu-item routerLink="/settings">
+            <mat-icon>settings</mat-icon> Settings
+          </button>
+          @if (isAdmin) {
+            <button mat-menu-item routerLink="/admin">
+              <mat-icon>admin_panel_settings</mat-icon> Admin Panel
+            </button>
+          }
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon> Logout
+          </button>
+        </mat-menu>
+
+      }
+    </div>
+
+  </div>
+</nav>

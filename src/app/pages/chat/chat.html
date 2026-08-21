@@ -1,0 +1,77 @@
+<app-navbar [isLoggedIn]="auth.isLoggedIn()" [isAdmin]="auth.isAdmin()" />
+
+<div class="chat-page">
+  <aside class="conversations-sidebar card">
+    <h3>Messages</h3>
+    @for (conv of conversations; track conv.id) {
+      <div
+        class="conv-item"
+        [class.active]="activeId === conv.id"
+        (click)="selectConversation(conv.id)"
+      >
+        <img [src]="conv.photo" [alt]="conv.name" class="conv-photo" />
+        <div class="conv-info">
+          <div class="conv-header">
+            <strong>{{ conv.name }}</strong>
+            <small>{{ conv.lastMessageTime }}</small>
+          </div>
+          <span class="conv-preview">{{ conv.lastMessage }}</span>
+        </div>
+        @if (conv.unread > 0) {
+          <span class="unread-badge">{{ conv.unread }}</span>
+        }
+      </div>
+    }
+  </aside>
+
+  <div class="chat-main" [class.with-editor]="showCodeEditor">
+    <div class="chat-window card">
+      <div class="chat-header">
+        <strong>{{ activeConversation?.name }}</strong>
+        <button mat-stroked-button (click)="toggleCodeEditor()">
+          <mat-icon>code</mat-icon> {{ showCodeEditor ? 'Close Editor' : 'Open Code Editor' }}
+        </button>
+      </div>
+
+      <div class="messages-area">
+        @for (msg of messages; track msg.id) {
+          <div class="message-bubble" [class.mine]="msg.isMine" [class.theirs]="!msg.isMine">
+            <p>{{ msg.text }}</p>
+            <small>{{ msg.timestamp }}</small>
+          </div>
+        }
+      </div>
+
+      <div class="chat-input">
+        <mat-form-field appearance="outline" class="input-field">
+          <input matInput placeholder="Type a message..." [(ngModel)]="newMessage" (keyup.enter)="sendMessage()" />
+        </mat-form-field>
+        <button mat-flat-button class="btn-primary" (click)="sendMessage()">
+          <mat-icon>send</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    @if (showCodeEditor) {
+      <div class="code-editor-panel card">
+        <div class="editor-toolbar">
+          <select [(ngModel)]="codeLanguage" class="lang-select">
+            <option value="javascript">JavaScript</option>
+            <option value="python">Python</option>
+            <option value="typescript">TypeScript</option>
+            <option value="java">Java</option>
+          </select>
+          <button mat-flat-button class="btn-primary" (click)="runCode()">Run Code</button>
+        </div>
+        <textarea class="code-textarea" [(ngModel)]="codeContent" spellcheck="false"></textarea>
+        <div class="output-panel">
+          <span class="output-label">Output</span>
+          <pre>Hello SkillCred!
+// Code execution is mocked for now.</pre>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+<app-footer />

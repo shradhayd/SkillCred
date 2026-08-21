@@ -1,0 +1,153 @@
+<app-navbar [isLoggedIn]="auth.isLoggedIn()" [isAdmin]="auth.isAdmin()" />
+
+<!-- ══════════ 3D HERO ══════════ -->
+<div class="tos-hero">
+  <div class="tos-mesh"   aria-hidden="true"></div>
+  <div class="tos-orb tos-orb1" aria-hidden="true"></div>
+  <div class="tos-orb tos-orb2" aria-hidden="true"></div>
+  <div class="tos-scroll3d"    aria-hidden="true">📜</div>
+  <div class="tos-ring3d"      aria-hidden="true"></div>
+  <div class="tos-diamond3d"   aria-hidden="true"></div>
+  <div class="tos-hero-inner">
+    <span class="tos-badge animate-fade-down">Legal</span>
+    <div class="tos-hero-icon animate-pop3d">⚖️</div>
+    <h1 class="animate-slide-3d">Terms of Service</h1>
+    <p  class="animate-slide-3d anim-d2">Please read these terms carefully before using SkillCred. By accessing our platform, you agree to be bound by these terms.</p>
+    <span class="tos-updated animate-fade-up anim-d3">Last updated: {{ lastUpdated }}</span>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="tos-layout page-container">
+  <aside class="tos-toc">
+    <p class="tos-toc-title">Contents</p>
+    <nav>
+      <a href="#tos1">1. Acceptance of Terms</a><a href="#tos2">2. The Platform</a>
+      <a href="#tos3">3. User Accounts</a><a href="#tos4">4. Credits System</a>
+      <a href="#tos5">5. Code of Conduct</a><a href="#tos6">6. Sessions & Bookings</a>
+      <a href="#tos7">7. User Content</a><a href="#tos8">8. Intellectual Property</a>
+      <a href="#tos9">9. Disclaimers</a><a href="#tos10">10. Limitation of Liability</a>
+      <a href="#tos11">11. Termination</a><a href="#tos12">12. Governing Law</a>
+    </nav>
+  </aside>
+
+  <main class="tos-body">
+
+    <div class="tos-summary reveal-up">
+      <span>⚡</span>
+      <p><strong>Summary:</strong> SkillCred is a peer-to-peer skill exchange platform. You earn credits by teaching and spend credits to learn. These terms are written to be clear and fair.</p>
+    </div>
+
+    <section id="tos1" class="tos-section reveal-up">
+      <span class="tos-num">01</span><h2>Acceptance of Terms</h2>
+      <p>By creating an account or using SkillCred you confirm that you are at least 13 years of age, have read and agreed to these Terms, have legal capacity to enter a binding agreement, and will comply with all applicable laws.</p>
+    </section>
+
+    <section id="tos2" class="tos-section reveal-up">
+      <span class="tos-num">02</span><h2>The Platform</h2>
+      <div class="tos-features">
+        @for (f of [{c:'teal',t:'Teach Skills',d:'Offer sessions and earn credits from learners.'},{c:'purple',t:'Learn Skills',d:'Book sessions and spend credits to gain knowledge.'},{c:'coral',t:'Manage Credits',d:'Track your balance, history, and session records.'},{c:'blue',t:'Connect',d:'Chat, leave reviews, and build your skill profile.'}]; track f.t; let i = $index) {
+          <div class="tos-feat-item reveal-up" [style.--i]="i">
+            <span class="tos-feat-dot" [class]="f.c"></span>
+            <p><strong>{{ f.t }}</strong> — {{ f.d }}</p>
+          </div>
+        }
+      </div>
+    </section>
+
+    <section id="tos3" class="tos-section reveal-up">
+      <span class="tos-num">03</span><h2>User Accounts</h2>
+      <ul>
+        <li>Provide accurate, current, and complete information during registration.</li>
+        <li>Keep your password confidential and not share it with any third party.</li>
+        <li>Notify us immediately at <a href="mailto:security@skillcred.com">security&#64;skillcred.com</a> of any unauthorised account use.</li>
+        <li>Be responsible for all activities that occur under your account.</li>
+      </ul>
+      <div class="tos-warn reveal-up">
+        <span>⚠️</span><p>You are solely responsible for all activities conducted through your account.</p>
+      </div>
+    </section>
+
+    <section id="tos4" class="tos-section reveal-up">
+      <span class="tos-num">04</span><h2>Credits System</h2>
+      <table class="tos-table">
+        <thead><tr><th>Action</th><th>Credit Effect</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Teaching a session</td><td class="cred-pos">+ Credits earned</td><td>Set by teacher profile</td></tr>
+          <tr><td>Learning a session</td><td class="cred-neg">− Credits spent</td><td>Shown at booking</td></tr>
+          <tr><td>New account bonus</td><td class="cred-pos">+ Welcome credits</td><td>One-time only</td></tr>
+          <tr><td>Cancellation &lt; 24h</td><td class="cred-neg">− Partial deduction</td><td>See cancellation policy</td></tr>
+        </tbody>
+      </table>
+      <p>Credits have no monetary value and cannot be converted to cash.</p>
+    </section>
+
+    <section id="tos5" class="tos-section reveal-up">
+      <span class="tos-num">05</span><h2>Code of Conduct</h2>
+      <div class="tos-conduct-grid">
+        <div class="tos-conduct prohibited reveal-left">
+          <h4>🚫 Prohibited</h4>
+          <ul><li>Harass, abuse, or threaten other users</li><li>Post false or misleading content</li><li>Impersonate any person or organisation</li><li>Share illegal or harmful content</li><li>Attempt to bypass the credit system</li><li>Use bots or automated tools</li></ul>
+        </div>
+        <div class="tos-conduct encouraged reveal-right">
+          <h4>✅ Encouraged</h4>
+          <ul><li>Be respectful and professional</li><li>Provide honest and helpful reviews</li><li>Communicate clearly about sessions</li><li>Report violations to our team</li><li>Keep your profile accurate and up to date</li><li>Give adequate cancellation notice</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="tos6" class="tos-section reveal-up">
+      <span class="tos-num">06</span><h2>Sessions &amp; Bookings</h2>
+      <ul>
+        <li>Credits are deducted at the time of booking confirmation.</li>
+        <li>Cancellations more than 24 hours before a session receive a full credit refund.</li>
+        <li>Cancellations within 24 hours may incur a partial credit deduction.</li>
+        <li>No-shows by the teacher result in a full credit refund to the student.</li>
+        <li>Disputes must be raised within 48 hours of the scheduled session end time.</li>
+      </ul>
+    </section>
+
+    <section id="tos7" class="tos-section reveal-up">
+      <span class="tos-num">07</span><h2>User Content</h2>
+      <p>You retain ownership of all content you submit. By submitting content, you grant SkillCred a non-exclusive, worldwide, royalty-free licence to use, display, and distribute your content solely for operating and improving the platform.</p>
+    </section>
+
+    <section id="tos8" class="tos-section reveal-up">
+      <span class="tos-num">08</span><h2>Intellectual Property</h2>
+      <p>The SkillCred platform, including its design, logos, branding, and software, is owned by SkillCred Inc. and protected by intellectual property laws. You may not copy, modify, distribute, or reverse-engineer any part of our platform without written permission.</p>
+    </section>
+
+    <section id="tos9" class="tos-section reveal-up">
+      <span class="tos-num">09</span><h2>Disclaimers</h2>
+      <p>SkillCred is provided on an <strong>"as is"</strong> and <strong>"as available"</strong> basis without warranties of any kind. We do not warrant that the platform will be uninterrupted or error-free, or that any teacher is qualified.</p>
+    </section>
+
+    <section id="tos10" class="tos-section reveal-up">
+      <span class="tos-num">10</span><h2>Limitation of Liability</h2>
+      <p>To the fullest extent permitted by law, SkillCred shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the platform, including loss of credits, data, or goodwill.</p>
+    </section>
+
+    <section id="tos11" class="tos-section reveal-up">
+      <span class="tos-num">11</span><h2>Termination</h2>
+      <p><strong>By you:</strong> Delete your account from the Settings page. Unused credits will be forfeited.</p>
+      <p><strong>By us:</strong> We may suspend or terminate your account immediately for violations of these terms, without refund of credits.</p>
+    </section>
+
+    <section id="tos12" class="tos-section reveal-up">
+      <span class="tos-num">12</span><h2>Governing Law</h2>
+      <p>These Terms are governed by the laws of the State of Delaware, USA. Any disputes are subject to the exclusive jurisdiction of courts in Delaware.</p>
+      <div class="tos-chips reveal-up">
+        <a href="mailto:legal@skillcred.com" class="tos-chip"><span>📧</span> legal&#64;skillcred.com</a>
+        <a routerLink="/contact-us" class="tos-chip"><span>💬</span> Contact Form</a>
+      </div>
+    </section>
+
+    <div class="tos-page-nav reveal-up">
+      <a routerLink="/privacy-policy" class="tos-nav-link">← Privacy Policy</a>
+      <a routerLink="/contact-us"     class="tos-nav-link">Contact Us →</a>
+    </div>
+
+  </main>
+</div>
+
+<app-footer />

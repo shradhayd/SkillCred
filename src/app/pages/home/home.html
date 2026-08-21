@@ -1,0 +1,242 @@
+<app-navbar
+  [isLoggedIn]="auth.isLoggedIn()"
+  [isAdmin]="auth.isAdmin()"
+/>
+
+
+<!-- =====================================================
+     HERO SECTION
+===================================================== -->
+
+<section class="hero">
+
+  <!-- Full background image -->
+  <div class="hero-background">
+    <img
+      src="/image/skill-exchange.png"
+      alt=""
+    />
+  </div>
+
+  <!-- Overlay to make text readable -->
+  <div class="hero-overlay"></div>
+
+
+  <!-- Content on top of image -->
+  <div class="hero-inner">
+
+    <div class="hero-content">
+
+      <h1>
+        Learn Anything. Teach Anything. Pay With Skills.
+      </h1>
+
+      <p class="hero-sub">
+        Exchange knowledge using credits — no money needed.
+        Join a community of learners and teachers.
+      </p>
+
+
+      <!-- =================================================
+           SEARCH
+      ================================================= -->
+
+      <div class="search-bar">
+
+        <mat-form-field
+          appearance="outline"
+          class="search-field"
+          subscriptSizing="dynamic"
+        >
+
+          <mat-icon matPrefix>
+            search
+          </mat-icon>
+
+          <input
+            matInput
+            placeholder="Search for skills, teachers, or topics..."
+            [(ngModel)]="searchQuery"
+          />
+
+        </mat-form-field>
+
+
+        <a
+          routerLink="/browse-skills"
+          mat-flat-button
+          class="btn-primary search-btn"
+        >
+          Search
+        </a>
+
+      </div>
+
+
+      <!-- =================================================
+           AUTHENTICATION BUTTONS
+      ================================================= -->
+
+      @if (!auth.isLoggedIn()) {
+
+        <div class="hero-cta">
+
+          <a
+            routerLink="/signup"
+            mat-flat-button
+            class="btn-primary"
+          >
+            Get Started Free
+          </a>
+
+
+          <a
+            routerLink="/how-it-works"
+            mat-stroked-button
+            class="btn-hero-outline"
+          >
+            Learn How It Works
+          </a>
+
+        </div>
+
+      } @else {
+
+        <div class="hero-cta">
+
+          <a
+            routerLink="/browse-skills"
+            mat-flat-button
+            class="btn-primary"
+          >
+            Browse Skills
+          </a>
+
+
+          <a
+            routerLink="/my-profile"
+            mat-stroked-button
+            class="btn-hero-outline"
+          >
+            My Profile
+          </a>
+
+        </div>
+
+      }
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     POPULAR CATEGORIES
+===================================================== -->
+
+<section class="categories-section page-container">
+
+  <h2>
+    Popular Skill Categories
+  </h2>
+
+  <p class="section-sub">
+    Explore skills across diverse categories and find your perfect match
+  </p>
+
+
+  <div class="categories-grid">
+
+    @for (cat of categories; track cat.id) {
+
+      <a
+        [routerLink]="['/browse-skills']"
+        [queryParams]="{ category: cat.id }"
+        class="category-card card"
+      >
+
+        <div
+          class="icon-box"
+          [class]="cat.colorClass"
+        >
+          {{ cat.icon }}
+        </div>
+
+
+        <h3>
+          {{ cat.name }}
+        </h3>
+
+
+        <span class="explore-link">
+          Explore →
+        </span>
+
+      </a>
+
+    }
+
+  </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     WELCOME SECTION
+===================================================== -->
+
+@if (auth.isLoggedIn()) {
+
+  <section class="welcome-section page-container">
+
+    <div class="welcome-card card">
+
+      <h3>
+        Welcome back, {{ auth.currentUser()?.name }}! 👋
+      </h3>
+
+
+      <p>
+        You have
+        <strong>
+          {{ auth.currentUser()?.credits }} credits
+        </strong>
+        available.
+
+        Ready to learn or teach today?
+      </p>
+
+
+      <div class="welcome-actions">
+
+        <a
+          routerLink="/browse-skills"
+          mat-flat-button
+          class="btn-primary"
+        >
+          Find a Teacher
+        </a>
+
+
+        <a
+          routerLink="/wallet"
+          mat-stroked-button
+        >
+          View Wallet
+        </a>
+
+      </div>
+
+    </div>
+
+  </section>
+
+}
+
+
+
+<app-footer />

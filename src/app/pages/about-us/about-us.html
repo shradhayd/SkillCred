@@ -1,0 +1,195 @@
+<app-navbar [isLoggedIn]="auth.isLoggedIn()" [isAdmin]="auth.isAdmin()" />
+
+<!-- ══════════ 3D HERO SLIDER ══════════ -->
+<section class="au-hero" [attr.data-slide]="currentHero().bg">
+
+  <!-- Mesh grid overlay -->
+  <div class="au-mesh" aria-hidden="true"></div>
+
+  <!-- Ambient orbs -->
+  <div class="au-orb au-orb1" aria-hidden="true"></div>
+  <div class="au-orb au-orb2" aria-hidden="true"></div>
+  <div class="au-orb au-orb3" aria-hidden="true"></div>
+
+  <!-- 3D Rotating Cube -->
+  <div class="au-cube3d" aria-hidden="true">
+    <div class="cube-face cf"></div><div class="cube-face cb"></div>
+    <div class="cube-face cl"></div><div class="cube-face cr"></div>
+    <div class="cube-face ct"></div><div class="cube-face cbt"></div>
+  </div>
+
+  <!-- 3D Spinning Ring -->
+  <div class="au-ring3d" aria-hidden="true"></div>
+
+  <!-- 3D Diamond -->
+  <div class="au-diamond3d" aria-hidden="true"></div>
+
+  <!-- Slide content -->
+  <div class="au-slide-inner" [class.au-animating]="heroAnimating()">
+    <span class="au-badge animate-flip-y">{{ currentHero().badge }}</span>
+    <div class="au-emoji animate-pop3d">{{ currentHero().emoji }}</div>
+    <h1 class="animate-slide-3d">{{ currentHero().title }}</h1>
+    <p  class="animate-slide-3d anim-d2">{{ currentHero().subtitle }}</p>
+    <div class="au-ctas animate-slide-3d anim-d3">
+      <a routerLink="/signup"       mat-flat-button   class="btn-primary au-btn-main">Join for Free</a>
+      <a routerLink="/how-it-works" mat-stroked-button class="au-btn-ghost">How It Works →</a>
+    </div>
+  </div>
+
+  <!-- Arrows -->
+  <button class="au-arrow au-arrow-l" (click)="prevHero()"><mat-icon>chevron_left</mat-icon></button>
+  <button class="au-arrow au-arrow-r" (click)="nextHero()"><mat-icon>chevron_right</mat-icon></button>
+
+  <!-- Dots -->
+  <div class="au-dots">
+    @for (s of heroSlides; track s.bg; let i = $index) {
+      <button class="au-dot" [class.active]="heroIndex()===i" (click)="goHero(i)"></button>
+    }
+  </div>
+  <span class="au-counter">{{ heroIndex()+1 }} / {{ heroSlides.length }}</span>
+</section>
+
+<!-- ══════════ STATS BAR ══════════ -->
+<div class="au-stats-bar">
+  <div class="page-container au-stats-grid">
+    @for (s of stats; track s.label; let i = $index) {
+      <div class="au-stat-card reveal-flip-x" [style.--i]="i">
+        <span class="au-stat-emoji">{{ s.icon }}</span>
+        <strong class="au-stat-val">{{ s.value }}</strong>
+        <span class="au-stat-lbl">{{ s.label }}</span>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- ══════════ MISSION ══════════ -->
+<section class="au-mission page-container">
+  <div class="au-mission-text reveal-left">
+    <span class="au-tag">Our Mission</span>
+    <h2>Knowledge should be everyone's currency</h2>
+    <p>We started SkillCred because the best teachers aren't always found in classrooms — they live next door and work in coffee shops. They just needed a place to connect with people who want to learn.</p>
+    <p>SkillCred replaces money with credits. Teach, earn, learn. It's a cycle of continuous community-powered growth.</p>
+    <a routerLink="/how-it-works" mat-stroked-button class="au-mission-link">
+      <mat-icon>arrow_forward</mat-icon> Learn How Credits Work
+    </a>
+  </div>
+  <div class="reveal-right">
+    <div class="au-cycle-card card">
+      @for (step of [{e:'🎓',t:'You Teach',d:'Share expertise in a live session',c:'teal'},{e:'⚡',t:'Earn Credits',d:'Credits land in your wallet',c:'purple'},{e:'📚',t:'You Learn',d:'Spend credits on any skill',c:'coral'},{e:'🔄',t:'Repeat',d:'Keep growing — never stop',c:'blue'}]; track step.t; let i = $index) {
+        <div class="au-step reveal-zoom3d" [style.--i]="i">
+          <span class="au-step-icon" [class]="step.c">{{ step.e }}</span>
+          <div><strong>{{ step.t }}</strong><p>{{ step.d }}</p></div>
+        </div>
+        @if (i < 3) { <div class="au-step-arrow">↓</div> }
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 3D FLIP VALUE CARDS ══════════ -->
+<section class="au-values-section">
+  <div class="page-container">
+    <span class="au-tag reveal-up">Our Values</span>
+    <h2 class="reveal-up">What we stand for</h2>
+    <p class="au-sub reveal-up">Hover each card to see what it really means to us.</p>
+    <div class="au-values-grid">
+      @for (v of values; track v.title; let i = $index) {
+        <div class="au-flip flip-card reveal-scale" [style.--i]="i">
+          <div class="flip-card-inner">
+            <div class="au-flip-front flip-card-front" [attr.data-c]="v.color">
+              <span class="au-ficon">{{ v.icon }}</span>
+              <h3>{{ v.title }}</h3>
+              <span class="au-fhint">Hover to reveal →</span>
+            </div>
+            <div class="au-flip-back flip-card-back" [attr.data-c]="v.color">
+              <span class="au-ficon-sm">{{ v.icon }}</span>
+              <p>{{ v.back }}</p>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ TESTIMONIAL SLIDER ══════════ -->
+<section class="au-testi-section page-container">
+  <span class="au-tag reveal-up">What Users Say</span>
+  <h2 class="reveal-up">Stories from our community</h2>
+  <div class="au-testi-wrapper reveal-zoom3d">
+    <div class="au-testi-track">
+      <div class="au-testi-inner">
+        <div class="au-stars">
+          @for (s of [1,2,3,4,5]; track s) { <mat-icon class="au-star">star</mat-icon> }
+        </div>
+        <p class="au-quote">"{{ currentTesti().quote }}"</p>
+        <div class="au-author">
+          <img [src]="currentTesti().photo" [alt]="currentTesti().name" class="au-author-img" />
+          <div><strong>{{ currentTesti().name }}</strong><span>{{ currentTesti().role }}</span></div>
+        </div>
+      </div>
+    </div>
+    <button class="au-tarrow au-tarrow-l" (click)="prevTesti()"><mat-icon>chevron_left</mat-icon></button>
+    <button class="au-tarrow au-tarrow-r" (click)="nextTesti()"><mat-icon>chevron_right</mat-icon></button>
+    <div class="au-tdots">
+      @for (t of testimonials; track t.name; let i = $index) {
+        <button class="au-dot" [class.active]="testiIndex()===i" (click)="goTesti(i)"></button>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ TEAM — 3D Tilt Cards ══════════ -->
+<section class="au-team-section page-container">
+  <span class="au-tag reveal-up">The Team</span>
+  <h2 class="reveal-up">Meet the people behind SkillCred</h2>
+  <p class="au-sub reveal-up">A small, passionate team who believes in the power of shared knowledge.</p>
+  <div class="au-team-grid">
+    @for (m of team; track m.name; let i = $index) {
+      <div class="au-team-card card reveal-flip-y" [style.--i]="i">
+        <img [src]="m.photo" [alt]="m.name" class="au-team-photo" />
+        <h3>{{ m.name }}</h3>
+        <span class="au-team-role">{{ m.role }}</span>
+        <p>{{ m.bio }}</p>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- ══════════ 3D TIMELINE ══════════ -->
+<section class="au-tl-section page-container">
+  <span class="au-tag reveal-up">Our Journey</span>
+  <h2 class="reveal-up">From idea to impact</h2>
+  <div class="au-timeline">
+    <div class="au-tl-line"></div>
+    @for (m of milestones; track m.title; let i = $index) {
+      <div class="au-tl-item reveal-up" [class.right]="i%2!==0" [style.--i]="i">
+        <div class="au-tl-card card">
+          <span class="au-tl-year">{{ m.year }}</span>
+          <h3>{{ m.title }}</h3>
+          <p>{{ m.desc }}</p>
+        </div>
+        <div class="au-tl-dot"></div>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- ══════════ CTA ══════════ -->
+<section class="au-cta-section reveal-up">
+  <div class="au-cta-rings" aria-hidden="true">
+    <div class="au-cta-ring r1"></div>
+    <div class="au-cta-ring r2"></div>
+    <div class="au-cta-ring r3"></div>
+  </div>
+  <div class="au-cta-inner">
+    <h2 class="animate-slide-3d">Ready to join the skill revolution?</h2>
+    <p class="animate-slide-3d anim-d1">Over 12,000 people are already teaching and learning on SkillCred.</p>
+    <div class="au-cta-btns animate-slide-3d anim-d2">
+      <a routerLink="/signup"        mat-flat-button   class="btn-primary au-cta-btn">Get Started Free</a>
+      <a routerLink="/browse-skills" mat-stroked-button class="au-cta-ghost">Explore Skills →</a>
+    </div>
+  </div>
+</section>
+
+<app-footer />

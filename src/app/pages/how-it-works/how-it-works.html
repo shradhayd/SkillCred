@@ -1,0 +1,54 @@
+<app-navbar [isLoggedIn]="auth.isLoggedIn()" [isAdmin]="auth.isAdmin()" />
+
+<div class="page-container">
+  <div class="page-header">
+    <h1>How SkillCred Works</h1>
+    <p>Three simple steps to start exchanging skills with our community</p>
+  </div>
+
+  <div class="steps-grid">
+    @for (step of steps; track step.num) {
+      <div class="step-card card">
+        <div class="step-badge">{{ step.num }}</div>
+        <mat-icon class="step-icon">{{ step.icon }}</mat-icon>
+        <h3>{{ step.title }}</h3>
+        <p>{{ step.desc }}</p>
+      </div>
+    }
+  </div>
+
+  <section class="features-section">
+    <h2>Why It's Different</h2>
+    <div class="features-grid">
+      @for (feat of features; track feat.title) {
+        <div class="feature-card card">
+          <div class="feature-icon">{{ feat.icon }}</div>
+          <h3>{{ feat.title }}</h3>
+          <p>{{ feat.desc }}</p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <section class="faq-section">
+    <h2>Frequently Asked Questions</h2>
+    <mat-accordion>
+      @for (faq of faqs; track faq.q) {
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{ faq.q }}</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>{{ faq.a }}</p>
+        </mat-expansion-panel>
+      }
+    </mat-accordion>
+  </section>
+</div>
+
+<section class="cta-banner gradient-cta">
+  <h2>Ready to Start Your Skill Journey?</h2>
+  <p>Join thousands of learners and teachers on SkillCred today.</p>
+  <a routerLink="/signup" mat-flat-button class="btn-primary cta-btn">Get Started</a>
+</section>
+
+<app-footer />

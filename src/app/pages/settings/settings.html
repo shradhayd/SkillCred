@@ -1,0 +1,69 @@
+<app-navbar [isLoggedIn]="auth.isLoggedIn()" [isAdmin]="auth.isAdmin()" />
+
+<div class="page-container settings-page">
+  <h1>Settings</h1>
+
+  <div class="settings-card card">
+    <h3>Profile Information</h3>
+    <div class="photo-upload">
+      <img [src]="auth.currentUser()?.photo" alt="Profile" class="profile-photo" />
+      <button mat-stroked-button>
+        <mat-icon>upload</mat-icon> Change Photo
+      </button>
+      <input type="file" hidden #fileInput accept="image/*" />
+    </div>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Name</mat-label>
+      <input matInput [(ngModel)]="name" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Bio</mat-label>
+      <textarea matInput rows="3" [(ngModel)]="bio"></textarea>
+    </mat-form-field>
+    <button mat-flat-button class="btn-primary" (click)="saveProfile()">Save Changes</button>
+  </div>
+
+  <div class="settings-card card">
+    <h3>Change Password</h3>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Current Password</mat-label>
+      <input matInput type="password" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>New Password</mat-label>
+      <input matInput type="password" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Confirm New Password</mat-label>
+      <input matInput type="password" />
+    </mat-form-field>
+    <button mat-stroked-button>Update Password</button>
+  </div>
+
+  <div class="settings-card card">
+    <h3>Notification Preferences</h3>
+    <div class="toggle-row">
+      <span>Email notifications</span>
+      <mat-slide-toggle [(ngModel)]="emailNotifications"></mat-slide-toggle>
+    </div>
+    <div class="toggle-row">
+      <span>Session reminders</span>
+      <mat-slide-toggle [(ngModel)]="sessionReminders"></mat-slide-toggle>
+    </div>
+    <div class="toggle-row">
+      <span>Marketing emails</span>
+      <mat-slide-toggle [(ngModel)]="marketingEmails"></mat-slide-toggle>
+    </div>
+  </div>
+
+  <div class="danger-zone card">
+    <button mat-stroked-button color="warn" (click)="logout()">
+      <mat-icon>logout</mat-icon> Logout
+    </button>
+    <button mat-stroked-button color="warn" (click)="deleteAccount()">
+      <mat-icon>delete_forever</mat-icon> Delete Account
+    </button>
+  </div>
+</div>
+
+<app-footer />

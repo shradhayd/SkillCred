@@ -1,0 +1,96 @@
+/* ================================================================
+   TERMS OF SERVICE — 3D CSS
+================================================================ */
+
+/* ── 3D HERO ──────────────────────────────────────────────── */
+.tos-hero { background:linear-gradient(135deg,#1a0838,#3b1274,#1a1560,#0a1838);background-size:300% 300%;animation:gradientShift 14s ease infinite;padding:5.5rem 2rem 4rem;text-align:center;color:#fff;position:relative;overflow:hidden; }
+.tos-mesh { position:absolute;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:50px 50px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%); }
+.tos-orb   { position:absolute;border-radius:50%;filter:blur(55px);pointer-events:none;z-index:2; }
+.tos-orb1  { width:360px;height:360px;top:-80px;right:-60px; background:rgba(127,119,221,.22);animation:float3D 8s ease-in-out infinite; }
+.tos-orb2  { width:240px;height:240px;bottom:-60px;left:-40px;background:rgba(29,158,117,.15); animation:float3D 11s ease-in-out infinite;animation-delay:-5s; }
+.tos-scroll3d  { position:absolute;right:7%;top:18%;z-index:3;font-size:3rem;animation:tiltLoop 9s ease-in-out infinite;pointer-events:none;filter:drop-shadow(0 4px 16px rgba(0,0,0,.3)); }
+.tos-ring3d    { position:absolute;left:6%;bottom:15%;z-index:3;width:80px;height:80px;border-radius:50%;border:2px solid rgba(127,119,221,.35);animation:spin3D 11s linear infinite;pointer-events:none; }
+.tos-diamond3d { position:absolute;left:15%;top:20%;z-index:3;width:36px;height:36px;background:rgba(29,158,117,.2);border:1px solid rgba(255,255,255,.2);transform:rotate(45deg);animation:tiltLoop 7s ease-in-out infinite;animation-delay:-3s;pointer-events:none; }
+.tos-hero-inner { position:relative;z-index:10;max-width:720px;margin:0 auto; }
+.tos-badge  { display:inline-block;background:rgba(127,119,221,.2);color:#a59ff8;border:1px solid rgba(127,119,221,.45);padding:.4rem 1.1rem;border-radius:50px;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:1rem; }
+.tos-hero-icon { font-size:4rem;display:block;margin-bottom:.85rem;animation:float3D 4.5s ease-in-out infinite;filter:drop-shadow(0 6px 18px rgba(0,0,0,.4)); }
+.tos-hero h1 { font-size:3rem;font-weight:900;margin:0 0 1rem;letter-spacing:-.5px;text-shadow:0 4px 20px rgba(0,0,0,.3); }
+.tos-hero p  { font-size:1.1rem;color:rgba(255,255,255,.72);margin:0 0 1.25rem;line-height:1.75; }
+.tos-updated { display:inline-block;font-size:.85rem;color:rgba(255,255,255,.45);background:rgba(255,255,255,.09);padding:.3rem 1rem;border-radius:20px; }
+
+/* ── LAYOUT ───────────────────────────────────────────────── */
+.tos-layout { display:grid;grid-template-columns:220px 1fr;gap:3rem;padding-top:3rem;padding-bottom:5rem;align-items:start; }
+
+/* ── TOC (3D hover) ───────────────────────────────────────── */
+.tos-toc { position:sticky;top:80px;background:var(--surface-card);border:1px solid var(--border);border-radius:14px;padding:1.5rem;transition:transform .3s,box-shadow .3s; }
+.tos-toc:hover { transform:perspective(600px) rotateY(2.5deg) translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.08); }
+.tos-toc-title { font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin:0 0 .9rem; }
+.tos-toc nav { display:flex;flex-direction:column;gap:.05rem; }
+.tos-toc nav a { display:block;padding:.45rem .7rem;font-size:.83rem;color:var(--text-muted);text-decoration:none;border-radius:6px;line-height:1.4;transition:all .22s; }
+.tos-toc nav a:hover { background:rgba(127,119,221,.08);color:var(--primary-purple);transform:perspective(400px) translateX(4px) rotateY(3deg); }
+
+/* ── CONTENT ──────────────────────────────────────────────── */
+.tos-body { min-width:0; }
+.tos-summary { display:flex;align-items:flex-start;gap:1rem;background:linear-gradient(135deg,rgba(29,158,117,.05),rgba(127,119,221,.05));border:1px solid rgba(127,119,221,.22);border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:.5rem;font-size:.95rem;color:var(--text-muted);line-height:1.7;transition:transform .3s,box-shadow .3s; }
+.tos-summary:hover { transform:perspective(700px) rotateX(-2deg);box-shadow:0 6px 24px rgba(127,119,221,.1); }
+.tos-summary > span { font-size:1.5rem;flex-shrink:0;animation:float 3.5s ease-in-out infinite; }
+.tos-summary strong { color:var(--text-primary); }
+
+.tos-section { padding:2.5rem 0;border-bottom:1px solid var(--border); }
+.tos-section:last-of-type { border-bottom:none; }
+.tos-num    { display:inline-block;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--primary-purple);opacity:.7;margin-bottom:.5rem; }
+.tos-section h2 { font-size:1.55rem;font-weight:700;margin:0 0 1.1rem; }
+.tos-section p  { color:var(--text-muted);line-height:1.8;margin:0 0 .9rem; }
+.tos-section ul { color:var(--text-muted);line-height:1.8;padding-left:1.5rem;margin:0 0 .9rem; }
+.tos-section ul li { margin-bottom:.45rem;transition:all .2s; }
+.tos-section ul li:hover { color:var(--text-primary);transform:translateX(4px); }
+.tos-section a  { color:var(--primary-teal);text-decoration:none; }
+
+/* Feature items — 3D */
+.tos-features { display:flex;flex-direction:column;gap:.65rem;margin:1.2rem 0; }
+.tos-feat-item { display:flex;align-items:flex-start;gap:.85rem;padding:1rem 1.2rem;background:var(--surface-card);border:1px solid var(--border);border-radius:10px;font-size:.9rem;color:var(--text-muted);line-height:1.6;transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s; }
+.tos-feat-item:hover { transform:perspective(600px) rotateX(-4deg) translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.09); }
+.tos-feat-dot { width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:5px; }
+.tos-feat-dot.teal   { background:var(--primary-teal) } .tos-feat-dot.purple { background:var(--primary-purple) }
+.tos-feat-dot.coral  { background:#f87171 }              .tos-feat-dot.blue   { background:#60a5fa }
+.tos-feat-item strong { color:var(--text-primary); }
+
+/* Warn box */
+.tos-warn { display:flex;align-items:flex-start;gap:.75rem;background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.25);border-radius:10px;padding:1rem 1.2rem;margin-top:1rem;font-size:.9rem;transition:transform .3s; }
+.tos-warn:hover { transform:perspective(700px) rotateX(-2deg); }
+.tos-warn span { font-size:1.2rem;flex-shrink:0; }
+.tos-warn p    { margin:0;color:var(--text-muted); }
+
+/* Table */
+.tos-table { width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.9rem; }
+.tos-table th { text-align:left;padding:.7rem 1rem;background:var(--surface-card);border-bottom:2px solid var(--border);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted); }
+.tos-table td { padding:.7rem 1rem;border-bottom:1px solid var(--border);color:var(--text-muted);transition:background .2s; }
+.tos-table tr:hover td { background:rgba(127,119,221,.03); }
+.tos-table tr:last-child td { border-bottom:none; }
+.cred-pos { color:var(--primary-teal)!important;font-weight:600; } .cred-neg { color:#f87171!important;font-weight:600; }
+
+/* 3D Conduct flip-ish cards */
+.tos-conduct-grid { display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin:1.2rem 0; }
+.tos-conduct { border-radius:12px;padding:1.5rem;transition:transform .4s cubic-bezier(.22,1,.36,1),box-shadow .4s;transform-style:preserve-3d; }
+.tos-conduct.prohibited { background:rgba(248,113,113,.04);border:1px solid rgba(248,113,113,.2); }
+.tos-conduct.prohibited:hover { transform:perspective(700px) rotateX(-6deg) rotateY(-5deg) translateY(-5px);box-shadow:0 16px 48px rgba(248,113,113,.15); }
+.tos-conduct.encouraged { background:rgba(29,158,117,.04);border:1px solid rgba(29,158,117,.2); }
+.tos-conduct.encouraged:hover { transform:perspective(700px) rotateX(-6deg) rotateY(5deg) translateY(-5px);box-shadow:0 16px 48px rgba(29,158,117,.15); }
+.tos-conduct h4 { margin:0 0 .75rem;font-size:.95rem;font-weight:700; }
+.tos-conduct ul { margin:0;padding-left:1.2rem;color:var(--text-muted);font-size:.87rem;line-height:1.9; }
+.tos-conduct ul li { transition:transform .2s; }
+.tos-conduct ul li:hover { transform:translateX(4px);color:var(--text-primary); }
+
+/* Contact chips */
+.tos-chips { display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.25rem; }
+.tos-chip  { display:flex;align-items:center;gap:.5rem;padding:.65rem 1.25rem;background:var(--surface-card);border:1px solid var(--border);border-radius:50px;font-size:.9rem;color:var(--text-primary);text-decoration:none;transition:all .25s; }
+.tos-chip:hover { border-color:var(--primary-teal);color:var(--primary-teal);transform:perspective(400px) rotateX(-5deg) translateY(-3px);box-shadow:0 8px 20px rgba(29,158,117,.15); }
+
+/* Footer nav */
+.tos-page-nav { display:flex;justify-content:space-between;padding-top:2rem;flex-wrap:wrap;gap:.75rem; }
+.tos-nav-link  { font-size:.9rem;font-weight:600;color:var(--primary-teal);text-decoration:none;display:inline-block;transition:transform .2s; }
+.tos-nav-link:hover { text-decoration:underline;transform:perspective(400px) translateX(4px) rotateY(-5deg); }
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+@media (max-width:900px) { .tos-layout { grid-template-columns:1fr; } .tos-toc { display:none; } .tos-conduct-grid { grid-template-columns:1fr; } }
+@media (max-width:600px) { .tos-hero h1 { font-size:2.2rem; } .tos-scroll3d,.tos-ring3d,.tos-diamond3d { display:none; } }

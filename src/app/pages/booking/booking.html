@@ -1,0 +1,89 @@
+<app-navbar [isLoggedIn]="auth.isLoggedIn()" [isAdmin]="auth.isAdmin()" />
+
+<div class="page-container booking-page">
+  @if (teacher) {
+    <div class="teacher-summary card">
+      <img [src]="teacher.photo" [alt]="teacher.name" class="teacher-photo" />
+      <div>
+        <h2>{{ teacher.name }}</h2>
+        <span class="skill-tag">{{ teacher.skill }}</span>
+        <div class="rating">⭐ {{ teacher.rating }}</div>
+      </div>
+    </div>
+
+    <div class="booking-layout">
+      <div class="booking-main">
+        <div class="card">
+          <h3>Select Date</h3>
+          <mat-form-field appearance="outline">
+            <mat-label>Choose a date</mat-label>
+            <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" />
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="card">
+          <h3>Select Time Slot</h3>
+          <div class="time-slots">
+            @for (slot of timeSlots; track slot) {
+              <button
+                class="time-pill"
+                [class.selected]="selectedSlot === slot"
+                (click)="selectSlot(slot)"
+              >{{ slot }}</button>
+            }
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Message (optional)</h3>
+          <mat-form-field appearance="outline" class="full-width">
+            <textarea matInput rows="3" placeholder="Add a note for the teacher..." [(ngModel)]="message"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <aside class="booking-sidebar card">
+        <h3>Session Details</h3>
+        <div class="detail-item">
+          <span>Skill</span>
+          <strong>{{ teacher.skill }}</strong>
+        </div>
+        <div class="detail-item">
+          <span>Duration</span>
+          <strong>1 hour</strong>
+        </div>
+        <div class="detail-item">
+          <span>Credits Required</span>
+          <strong class="credits">{{ teacher.creditsRequired }} credits</strong>
+        </div>
+        @if (selectedDate) {
+          <div class="detail-item">
+            <span>Date</span>
+            <strong>{{ selectedDate | date:'mediumDate' }}</strong>
+          </div>
+        }
+        @if (selectedSlot) {
+          <div class="detail-item">
+            <span>Time</span>
+            <strong>{{ selectedSlot }}</strong>
+          </div>
+        }
+        <button
+          mat-flat-button
+          class="btn-primary confirm-btn"
+          [disabled]="!selectedDate || !selectedSlot"
+          (click)="confirmBooking()"
+        >Confirm Booking</button>
+      </aside>
+    </div>
+  } @else {
+    <div class="not-found card">
+      <h2>Teacher not found</h2>
+      <a routerLink="/browse-skills" mat-flat-button class="btn-primary">Browse Skills</a>
+    </div>
+  }
+</div>
+
+<app-footer />
