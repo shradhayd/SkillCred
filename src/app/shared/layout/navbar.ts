@@ -1,18 +1,20 @@
 import { Component, Input, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthService } from '../../core/auth.service';
+import { ThemeService } from '../../core/theme.service';
 import { NOTIFICATIONS } from '../mock-data';
 
 @Component({
   selector: 'app-navbar',
   imports: [
     RouterLink, RouterLinkActive,
-    MatButtonModule, MatIconModule, MatMenuModule, MatBadgeModule, MatDividerModule,
+    MatButton, MatIconButton, MatIconModule, MatMenuModule, MatBadgeModule, MatDividerModule, MatTooltipModule,
   ],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
@@ -22,6 +24,7 @@ export class Navbar {
   @Input() isAdmin    = false;
 
   protected auth = inject(AuthService);
+  protected theme = inject(ThemeService);
   private   router = inject(Router);
 
   protected notifications = NOTIFICATIONS;
@@ -41,4 +44,4 @@ export class Navbar {
     this.auth.logout();
     this.router.navigate(['/home']);
   }
-}
+}

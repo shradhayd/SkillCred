@@ -28,18 +28,21 @@ export class ContactUs implements OnInit, OnDestroy {
   heroSlides = [
     {
       emoji: '💬',
+      logo: '',
       heading: 'Get in Touch',
       sub: "Have a question, issue, or idea? Our team is here to help — usually within 24 hours.",
       bg: 'slide-green',
     },
     {
       emoji: '🛟',
+      logo: 'support_agent',
       heading: 'We\'re Here to Help',
       sub: 'From billing to bookings, our support team handles every kind of query with care and speed.',
       bg: 'slide-teal',
     },
     {
       emoji: '🤝',
+      logo: '',
       heading: 'Let\'s Work Together',
       sub: 'Interested in partnerships, integrations, or collaborations? We\'d love to hear from you.',
       bg: 'slide-purple',

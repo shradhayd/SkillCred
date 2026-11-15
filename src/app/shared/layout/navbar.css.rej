@@ -1,0 +1,108 @@
+diff a/src/app/shared/layout/navbar.css b/src/app/shared/layout/navbar.css	(rejected hunks)
+@@ -194,9 +213,77 @@
+ .notif-content span { font-size: 0.85rem; color: var(--text-muted); }
+ .notif-content small { font-size: 0.75rem; color: var(--text-muted); }
+ 
++/* =====================================================
++   DARK THEME OVERRIDES
++   ===================================================== */
++.dark-theme .navbar {
++  background: var(--navbar-bg);
++  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
++}
++
++.dark-theme .logo {
++  color: var(--primary-teal);
++}
++
++.dark-theme .nav-links > a,
++.dark-theme .nav-more-btn {
++  color: var(--text-muted);
++}
++
++.dark-theme .nav-links > a:hover,
++.dark-theme .nav-more-btn:hover,
++.dark-theme .nav-links > a.active,
++.dark-theme .nav-more-btn.active {
++  color: var(--primary-teal);
++  background: rgba(72, 201, 160, 0.1);
++}
++
++.dark-theme .nav-dropdown {
++  background: var(--surface-elevated);
++  border-color: var(--border);
++}
++
++.dark-theme .nav-dropdown-item {
++  color: var(--text-muted);
++}
++
++.dark-theme .nav-dropdown-item:hover {
++  background: rgba(72, 201, 160, 0.1);
++  color: var(--primary-teal);
++}
++
++.dark-theme .nav-dropdown-item mat-icon {
++  color: var(--text-muted);
++}
++
++.dark-theme .nav-dropdown-item:hover mat-icon {
++  color: var(--primary-teal);
++}
++
++.dark-theme .nav-dropdown-divider {
++  background: var(--divider);
++}
++
++/* Material menu dark theme */
++.dark-theme .mat-mdc-menu-panel {
++  background: var(--surface-elevated) !important;
++}
++
++.dark-theme .mat-mdc-menu-item {
++  color: var(--text-secondary) !important;
++}
++
++.dark-theme .mat-mdc-menu-item:hover {
++  background: rgba(72, 201, 160, 0.1) !important;
++}
++
++.dark-theme .mat-divider {
++  background: var(--divider) !important;
++}
++
+ /* =====================================================
+    RESPONSIVE ΓÇö tablet (Γëñ 1024px): shrink gaps
+-===================================================== */
++   ===================================================== */
+ @media (max-width: 1024px) {
+   .navbar-inner { gap: 0.75rem; }
+   .nav-links { gap: 0; }
+@@ -206,23 +293,22 @@
+ 
+ /* =====================================================
+    RESPONSIVE ΓÇö mobile (Γëñ 768px): hamburger drawer
+-===================================================== */
++   ===================================================== */
+ @media (max-width: 768px) {
+ 
+   .hamburger { display: flex; }
+ 
+-  /* Nav drawer slides down */
+   .nav-links {
+     display: none;
+     flex-direction: column;
+     align-items: flex-start;
+     gap: 0;
+     position: absolute;
+-    top: 64px;
++    top: 68px;
+     left: 0;
+     right: 0;
+-    background: #fff;
+-    border-top: 1px solid rgba(0,0,0,0.07);
++    background: var(--navbar-bg);
++    border-top: 1px solid var(--border);
+     box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+     padding: 0.75rem 1rem 1.25rem;
+     z-index: 150;

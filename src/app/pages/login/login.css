@@ -50,15 +50,29 @@
   color: var(--text-muted);
   margin-top: 1rem;
   padding: 0.5rem;
-  background: rgba(29, 158, 117, 0.08);
+  background: var(--badge-teal-bg);
   border-radius: 8px;
 }
 
 .error-msg {
-  background: #fff5f5;
-  color: #e53e3e;
+  background: var(--badge-coral-bg);
+  color: var(--error);
   padding: 0.75rem;
   border-radius: 8px;
   margin-bottom: 1rem;
   font-size: 0.9rem;
+}
+
+/* Dark theme overrides */
+.dark-theme .auth-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+}
+
+.dark-theme .demo-hint {
+  background: var(--badge-teal-bg);
+}
+
+.dark-theme .error-msg {
+  background: var(--badge-coral-bg);
 }

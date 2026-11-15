@@ -129,8 +129,6 @@
         </div>
       </div>
     </div>
-    <button class="au-tarrow au-tarrow-l" (click)="prevTesti()"><mat-icon>chevron_left</mat-icon></button>
-    <button class="au-tarrow au-tarrow-r" (click)="nextTesti()"><mat-icon>chevron_right</mat-icon></button>
     <div class="au-tdots">
       @for (t of testimonials; track t.name; let i = $index) {
         <button class="au-dot" [class.active]="testiIndex()===i" (click)="goTesti(i)"></button>

@@ -16,7 +16,13 @@
 
   <!-- Slide content -->
   <div class="cu-slide-content">
-    <div class="cu-emoji animate-pop3d">{{ currentSlide.emoji }}</div>
+    <div class="cu-emoji animate-pop3d" [class.cu-emoji-logo]="currentSlide.logo">
+      @if (currentSlide.logo) {
+        <mat-icon>{{ currentSlide.logo }}</mat-icon>
+      } @else {
+        {{ currentSlide.emoji }}
+      }
+    </div>
     <h1 class="animate-slide-3d">{{ currentSlide.heading }}</h1>
     <p  class="animate-slide-3d anim-d1">{{ currentSlide.sub }}</p>
   </div>

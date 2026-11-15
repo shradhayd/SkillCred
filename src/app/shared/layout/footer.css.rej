@@ -1,0 +1,78 @@
+diff a/src/app/shared/layout/footer.css b/src/app/shared/layout/footer.css	(rejected hunks)
+@@ -236,6 +236,76 @@
+   100% { opacity: 1; transform: scale(1); }
+ }
+ 
++/* ΓöÇΓöÇ DARK THEME OVERRIDES ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */
++.dark-theme .ft {
++  background: var(--footer-bg);
++  color: var(--footer-text);
++}
++
++.dark-theme .ft-stat strong {
++  background: linear-gradient(120deg, var(--primary-teal) 0%, var(--primary-purple) 100%);
++  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
++  background-clip: text;
++}
++
++.dark-theme .ft-stat span,
++.dark-theme .ft-tagline,
++.dark-theme .ft-nav-link,
++.dark-theme .ft-copy,
++.dark-theme .ft-bot-links a,
++.dark-theme .ft-lang-sel,
++.dark-theme .ft-nl-text,
++.dark-theme .ft-nl-note,
++.dark-theme .ft-nl-input::placeholder {
++  color: var(--text-muted);
++}
++
++.dark-theme .ft-name,
++.dark-theme .ft-col-hd {
++  color: #fff;
++}
++
++.dark-theme .ft-soc {
++  background: rgba(255,255,255,0.05);
++  border-color: rgba(255,255,255,0.08);
++}
++
++.dark-theme .ft-soc:hover {
++  background: rgba(72, 201, 160, 0.16);
++  border-color: rgba(72, 201, 160, 0.4);
++  color: #5de0b3;
++}
++
++.dark-theme .ft-nl-input {
++  background: var(--input-bg);
++  border-color: var(--input-border);
++  color: var(--text-primary);
++}
++
++.dark-theme .ft-nl-input:focus {
++  border-color: var(--primary-teal);
++}
++
++.dark-theme .ft-nl-btn {
++  background: linear-gradient(135deg, var(--primary-teal) 0%, #0e8a63 100%);
++}
++
++.dark-theme .ft-trust-badge {
++  background: rgba(255,255,255,0.03);
++  border-color: rgba(255,255,255,0.07);
++  color: var(--text-muted);
++}
++
++.dark-theme .ft-stats-strip {
++  background: rgba(255,255,255,0.015);
++  border-bottom-color: rgba(255,255,255,0.08);
++}
++
++.dark-theme .ft-bottom {
++  background: rgba(0,0,0,0.18);
++  border-top-color: rgba(255,255,255,0.08);
++}
++
+ /* ΓöÇΓöÇ RESPONSIVE ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */
+ @media (max-width: 1100px) {
+   .ft-body { grid-template-columns: 1fr 1fr 1fr; }

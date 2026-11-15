@@ -2,21 +2,23 @@
    BASE
 ===================================================== */
 .navbar {
-  background: #fff;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  background: var(--navbar-bg);
+  box-shadow: var(--shadow);
   position: sticky;
   top: 0;
   z-index: 200;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .navbar-inner {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 1.5rem;
-  height: 64px;
+  padding: 0 2rem;
+  height: 68px;
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 /* =====================================================
@@ -43,11 +45,12 @@
   border: none;
   cursor: pointer;
   color: var(--text-muted);
-  margin-left: auto;
-  padding: 4px;
-  border-radius: 6px;
+  padding: 8px;
+  border-radius: 8px;
   align-items: center;
   justify-content: center;
+  margin: 0;
+  flex-shrink: 0;
 }
 .hamburger:hover { color: var(--text-primary); }
 
@@ -59,6 +62,7 @@
   align-items: center;
   gap: 0.25rem;
   flex: 1;
+  justify-content: center;
 }
 
 .nav-links > a {
@@ -120,14 +124,15 @@
   top: calc(100% + 8px);
   left: 0;
   min-width: 210px;
-  background: #fff;
-  border: 1px solid rgba(0,0,0,0.09);
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
   border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  box-shadow: var(--shadow-lg);
   padding: 0.5rem;
   display: none;
   flex-direction: column;
   z-index: 300;
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .nav-dropdown.open { display: flex; }
 
@@ -159,7 +164,7 @@
 
 .nav-dropdown-divider {
   height: 1px;
-  background: rgba(0,0,0,0.07);
+  background: var(--divider);
   margin: 0.35rem 0.5rem;
 }
 
@@ -168,12 +173,57 @@
 
 /* =====================================================
    NAV ACTIONS
-===================================================== */
+   ===================================================== */
 .nav-actions {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   flex-shrink: 0;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  width: 64px;
+  height: 34px;
+  padding: 4px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--badge-teal-bg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-right: 0.25rem;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+.theme-toggle:hover {
+  box-shadow: 0 0 0 3px var(--badge-teal-bg);
+}
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--primary-teal);
+  outline-offset: 3px;
+}
+.theme-toggle-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--primary-teal);
+  color: var(--text-inverse);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateX(0);
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.3s ease, color 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+}
+.theme-toggle.dark .theme-toggle-thumb {
+  transform: translateX(30px);
+}
+.theme-toggle-thumb mat-icon {
+  font-size: 1.1rem;
+  width: 1.1rem;
+  height: 1.1rem;
+  line-height: 1.1rem;
 }
 
 .btn-login {
@@ -186,6 +236,10 @@
   height: 36px;
   border-radius: 50%;
   object-fit: cover;
+}
+
+:host-context(.dark-theme) .notif-btn {
+  --mat-icon-button-icon-color: #fff;
 }
 
 /* Notifications */
@@ -221,11 +275,12 @@
     top: 64px;
     left: 0;
     right: 0;
-    background: #fff;
-    border-top: 1px solid rgba(0,0,0,0.07);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    background: var(--navbar-bg);
+    border-top: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
     padding: 0.75rem 1rem 1.25rem;
     z-index: 150;
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   }
   .nav-links.open { display: flex; }
 
@@ -245,7 +300,7 @@
     flex-direction: column;
     width: 100%;
     gap: 0;
-    border-top: 1px solid rgba(0,0,0,0.06);
+    border-top: 1px solid var(--divider);
     margin-top: 0.4rem;
     padding-top: 0.4rem;
   }
@@ -261,7 +316,7 @@
     transition: background 0.15s, color 0.15s;
   }
   .nav-mobile-more a:hover,
-  .nav-mobile-more a.active { color: var(--primary-teal); background: rgba(29,158,117,0.06); }
+  .nav-mobile-more a.active { color: var(--primary-teal); background: rgba(72,201,160,0.1); }
 
   /* Keep actions visible */
   .nav-actions { margin-left: auto; }

@@ -123,9 +123,13 @@ section h2 { font-size:2.2rem;font-weight:900;margin:0 0 1rem;letter-spacing:-.4
 .au-fhint         { font-size:.76rem;color:var(--text-muted); }
 .au-flip-back p   { font-size:.93rem;line-height:1.7;margin:0;color:rgba(255,255,255,.92); }
 
+:host-context(.dark-theme) .au-flip-front h3,
+:host-context(.dark-theme) .au-author strong { color:#000; }
+
 /* ── TESTIMONIAL SLIDER ─────────────────────────────────── */
-.au-testi-section  { padding:5.5rem 0;background:linear-gradient(180deg,var(--surface) 0%,var(--surface-card) 100%); }
-.au-testi-wrapper  { position:relative;max-width:820px;margin:2.5rem auto 0; }
+.au-testi-section  { position:relative;isolation:isolate;padding:5.5rem 0;background:none; }
+.au-testi-section::before { content:'';position:absolute;z-index:-1;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);background:linear-gradient(180deg,var(--surface) 0%,var(--surface-card) 100%); }
+.au-testi-wrapper  { position:relative;width:100%;margin:2.5rem auto 0; }
 .au-testi-track    { background:#fff;border-radius:24px;padding:3.5rem 4rem;text-align:center;box-shadow:0 12px 60px rgba(0,0,0,.1);min-height:280px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;transition:transform .35s cubic-bezier(.22,1,.36,1); }
 .au-testi-track:hover { transform:perspective(800px) rotateX(-3deg) rotateY(2deg) translateY(-4px); }
 .au-testi-track::before { content:'"';position:absolute;top:1rem;left:2rem;font-size:9rem;color:rgba(29,158,117,.06);font-family:Georgia,serif;line-height:1;pointer-events:none; }
@@ -137,10 +141,9 @@ section h2 { font-size:2.2rem;font-weight:900;margin:0 0 1rem;letter-spacing:-.4
 .au-author-img { width:58px;height:58px;border-radius:50%;object-fit:cover;border:3px solid var(--primary-teal);box-shadow:0 0 0 4px rgba(29,158,117,.15); }
 .au-author strong { display:block;font-size:.96rem;font-weight:800; }
 .au-author span   { font-size:.83rem;color:var(--text-muted); }
-.au-tarrow { position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:#fff;border:1.5px solid var(--border);color:var(--text-muted);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5;transition:all .25s;box-shadow:0 4px 16px rgba(0,0,0,.08); }
-.au-tarrow-l { left:-60px } .au-tarrow-r { right:-60px }
-.au-tarrow:hover { border-color:var(--primary-teal);color:var(--primary-teal);transform:translateY(-50%) scale(1.12); }
-.au-tarrow mat-icon { font-size:1.3rem!important;width:1.3rem!important;height:1.3rem!important; }
+:host-context(.dark-theme) .au-testi-track .au-quote,
+:host-context(.dark-theme) .au-testi-track .au-author strong,
+:host-context(.dark-theme) .au-testi-track .au-author span { color:#000; }
 .au-tdots { display:flex;justify-content:center;gap:.5rem;margin-top:1.75rem; }
 
 /* ── TEAM ──────────────────────────────────────────────── */
@@ -189,5 +192,5 @@ section h2 { font-size:2.2rem;font-weight:900;margin:0 0 1rem;letter-spacing:-.4
 
 /* ── RESPONSIVE ─────────────────────────────────────────── */
 @media (max-width:1100px) { .au-team-grid { grid-template-columns:repeat(2,1fr); } }
-@media (max-width:960px)  { .au-hero { height:75vh;min-height:500px; } .au-slide-inner h1 { font-size:2.5rem; } .au-mission { grid-template-columns:1fr;gap:2.5rem; } .au-values-grid { grid-template-columns:repeat(2,1fr); } .au-tl-item,.au-tl-item.right { padding:0 0 0 2.75rem;justify-content:flex-start; } .au-tl-line { left:8px; } .au-tl-dot { left:8px; } .au-tl-card { max-width:100%; } .au-tarrow-l { left:-12px; } .au-tarrow-r { right:-12px; } }
-@media (max-width:640px)  { .au-hero { height:auto;min-height:540px; } .au-slide-inner h1 { font-size:2rem; } .au-arrow-l { left:.5rem; } .au-arrow-r { right:.5rem; } .au-stats-grid { grid-template-columns:repeat(2,1fr); } .au-values-grid { grid-template-columns:1fr; } .au-team-grid { grid-template-columns:1fr; } .au-cta-section h2 { font-size:1.9rem; } .au-testi-track { padding:2.5rem 1.75rem; } .au-tarrow { display:none; } .au-cube3d,.au-ring3d,.au-diamond3d { display:none; } }
+@media (max-width:960px)  { .au-hero { height:75vh;min-height:500px; } .au-slide-inner h1 { font-size:2.5rem; } .au-mission { grid-template-columns:1fr;gap:2.5rem; } .au-values-grid { grid-template-columns:repeat(2,1fr); } .au-tl-item,.au-tl-item.right { padding:0 0 0 2.75rem;justify-content:flex-start; } .au-tl-line { left:8px; } .au-tl-dot { left:8px; } .au-tl-card { max-width:100%; } }
+@media (max-width:640px)  { .au-hero { height:auto;min-height:540px; } .au-slide-inner h1 { font-size:2rem; } .au-arrow-l { left:.5rem; } .au-arrow-r { right:.5rem; } .au-stats-grid { grid-template-columns:repeat(2,1fr); } .au-values-grid { grid-template-columns:1fr; } .au-team-grid { grid-template-columns:1fr; } .au-cta-section h2 { font-size:1.9rem; } .au-testi-track { padding:2.5rem 1.75rem; } .au-cube3d,.au-ring3d,.au-diamond3d { display:none; } }
