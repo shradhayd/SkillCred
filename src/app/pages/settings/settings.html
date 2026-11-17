@@ -14,13 +14,62 @@
     </div>
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Name</mat-label>
-      <input matInput [(ngModel)]="name" />
+      <input matInput [(ngModel)]="name" maxlength="60" />
     </mat-form-field>
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Bio</mat-label>
-      <textarea matInput rows="3" [(ngModel)]="bio"></textarea>
+      <textarea matInput rows="3" [(ngModel)]="bio" maxlength="500"></textarea>
     </mat-form-field>
     <button mat-flat-button class="btn-primary" (click)="saveProfile()">Save Changes</button>
+  </div>
+
+  <div class="settings-card card">
+    <h3>Teaching Profile</h3>
+    <div class="toggle-row">
+      <span>I want to teach on SkillCred</span>
+      <mat-slide-toggle [(ngModel)]="isTeacher"></mat-slide-toggle>
+    </div>
+
+    @if (isTeacher) {
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Main skill (e.g. Python Programming)</mat-label>
+        <input matInput [(ngModel)]="skill" maxlength="60" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Category</mat-label>
+        <mat-select [(ngModel)]="category">
+          @for (cat of categories; track cat.id) {
+            <mat-option [value]="cat.id">{{ cat.icon }} {{ cat.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Credits per session</mat-label>
+        <input matInput type="number" min="1" max="100" [(ngModel)]="creditsRequired" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Experience level</mat-label>
+        <mat-select [(ngModel)]="experienceLevel">
+          <mat-option value="Beginner">Beginner</mat-option>
+          <mat-option value="Intermediate">Intermediate</mat-option>
+          <mat-option value="Advanced">Advanced</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="toggle-row">
+        <span>Available online now</span>
+        <mat-slide-toggle [(ngModel)]="isOnline"></mat-slide-toggle>
+      </div>
+    }
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Skills I teach (separate with commas)</mat-label>
+      <input matInput [(ngModel)]="skillsTeachText" placeholder="Angular, TypeScript, CSS" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Skills I want to learn (separate with commas)</mat-label>
+      <input matInput [(ngModel)]="skillsLearnText" placeholder="Piano, Photography" />
+    </mat-form-field>
+    <button mat-flat-button class="btn-primary" (click)="saveTeaching()">Save Teaching Profile</button>
   </div>
 
   <div class="settings-card card">
@@ -54,6 +103,7 @@
       <span>Marketing emails</span>
       <mat-slide-toggle [(ngModel)]="marketingEmails"></mat-slide-toggle>
     </div>
+    <button mat-flat-button class="btn-primary" (click)="savePreferences()">Save Preferences</button>
   </div>
 
   <div class="danger-zone card">

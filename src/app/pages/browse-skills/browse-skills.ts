@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,13 +12,13 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { Navbar } from '../../shared/layout/navbar';
 import { Footer } from '../../shared/layout/footer';
 import { AuthService } from '../../core/auth.service';
-import { TEACHERS, SKILL_CATEGORIES } from '../../shared/mock-data';
-import { Teacher } from '../../shared/models';
+import { TeacherService } from '../../core/teacher.service';
+import { SkillCategory, Teacher } from '../../shared/models';
 
 @Component({
   selector: 'app-browse-skills',
   imports: [
-    FormsModule, RouterLink, MatButtonModule, MatIconModule, MatCardModule,
+    FormsModule, MatButtonModule, MatIconModule, MatCardModule,
     MatFormFieldModule, MatInputModule, MatCheckboxModule, MatRadioModule,
     MatSlideToggleModule, Navbar, Footer,
   ],
@@ -29,9 +29,12 @@ export class BrowseSkills implements OnInit {
   protected auth = inject(AuthService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private teacherService = inject(TeacherService);
 
-  protected categories = SKILL_CATEGORIES;
-  protected allTeachers = TEACHERS;
+  protected categories: SkillCategory[] = [];
+  protected allTeachers: Teacher[] = [];
+  protected loading = true;
+  protected loadError = false;
   protected filteredTeachers: Teacher[] = [];
   protected searchQuery = '';
   protected sortBy = 'rating';
@@ -40,6 +43,25 @@ export class BrowseSkills implements OnInit {
   protected onlineOnly = false;
 
   ngOnInit(): void {
+    this.teacherService.getCategories().subscribe({
+      next: (categories) => (this.categories = categories),
+      error: () => (this.categories = []),
+    });
+
+    this.teacherService.getTeachers().subscribe({
+      next: (teachers) => {
+        this.allTeachers = teachers;
+        this.loading = false;
+        this.applyFilters();
+      },
+      error: () => {
+        this.allTeachers = [];
+        this.loading = false;
+        this.loadError = true;
+        this.applyFilters();
+      },
+    });
+
     this.route.queryParams.subscribe(params => {
       if (params['category']) {
         this.selectedCategories = [params['category']];

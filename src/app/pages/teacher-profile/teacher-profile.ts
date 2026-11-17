@@ -6,8 +6,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { Navbar } from '../../shared/layout/navbar';
 import { Footer } from '../../shared/layout/footer';
 import { AuthService } from '../../core/auth.service';
-import { TEACHERS, REVIEWS, SESSIONS } from '../../shared/mock-data';
-import { Teacher } from '../../shared/models';
+import { TeacherService } from '../../core/teacher.service';
+import { Review, Teacher } from '../../shared/models';
 
 @Component({
   selector: 'app-teacher-profile',
@@ -18,12 +18,40 @@ import { Teacher } from '../../shared/models';
 export class TeacherProfile implements OnInit {
   protected auth = inject(AuthService);
   private route = inject(ActivatedRoute);
+  private teacherService = inject(TeacherService);
+
   protected teacher: Teacher | undefined;
-  protected reviews = REVIEWS;
-  protected sessions = SESSIONS;
+  protected reviews: Review[] = [];
+  protected loading = true;
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    this.teacher = TEACHERS.find(t => t.id === id);
+    // paramMap (not snapshot) so moving from one teacher to another also reloads the data
+    this.route.paramMap.subscribe((params) => {
+      const id = params.get('id');
+      this.loading = true;
+      this.teacher = undefined;
+      this.reviews = [];
+
+      if (!id) {
+        this.loading = false;
+        return;
+      }
+
+      this.teacherService.getTeacher(id).subscribe({
+        next: (teacher) => {
+          this.teacher = teacher;
+          this.loading = false;
+        },
+        error: () => {
+          this.teacher = undefined;
+          this.loading = false;
+        },
+      });
+
+      this.teacherService.getReviews(id).subscribe({
+        next: (reviews) => (this.reviews = reviews),
+        error: () => (this.reviews = []),
+      });
+    });
   }
 }

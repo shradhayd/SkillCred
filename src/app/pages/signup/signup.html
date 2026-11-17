@@ -26,10 +26,15 @@
         <mat-label>Confirm Password</mat-label>
         <input matInput formControlName="confirmPassword" type="password" />
       </mat-form-field>
-      <button mat-flat-button class="btn-primary full-width submit-btn" type="submit" [disabled]="form.invalid">
-        Sign Up
+            <button mat-flat-button class="btn-primary full-width submit-btn" type="submit" [disabled]="form.invalid || loading">
+        {{ loading ? 'Creating account...' : 'Sign Up' }}
       </button>
     </form>
+        <div class="or-divider"><span>or</span></div>
+    <button mat-stroked-button type="button" class="google-btn full-width" (click)="googleLogin()" [disabled]="loading">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="" width="18" height="18" />
+      Continue with Google
+    </button>
 
     <p class="auth-footer">
       Already have an account? <a routerLink="/login">Login</a>

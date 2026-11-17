@@ -9,6 +9,19 @@ export interface User {
   isAdmin?: boolean;
   skillsTeach: string[];
   skillsLearn: string[];
+  // Fields stored by the backend in users/{uid}
+  ratingCount?: number;
+  isTeacher?: boolean;
+  skill?: string;
+  category?: string;
+  creditsRequired?: number;
+  experienceLevel?: 'Beginner' | 'Intermediate' | 'Advanced';
+  isOnline?: boolean;
+  settings?: {
+    emailNotifications: boolean;
+    sessionReminders: boolean;
+    marketingEmails: boolean;
+  };
 }
 
 export interface Teacher {

@@ -249,3 +249,14 @@ a {
   --mdc-protected-button-container-color: var(--accent-coral);
   --mdc-filled-button-container-color: var(--accent-coral);
 }
+/* Material buttons: use the app font everywhere */
+.mat-mdc-button,
+.mat-mdc-unelevated-button,
+.mat-mdc-outlined-button,
+.mat-mdc-raised-button,
+.mat-mdc-button .mdc-button__label,
+.mat-mdc-unelevated-button .mdc-button__label,
+.mat-mdc-outlined-button .mdc-button__label,
+.mat-mdc-raised-button .mdc-button__label {
+  font-family: var(--font-main) !important;
+}

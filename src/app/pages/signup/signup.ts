@@ -23,6 +23,7 @@ export class Signup {
   private router = inject(Router);
 
   protected error = '';
+  protected loading = false;
 
   protected form = this.fb.group({
     name: ['', Validators.required],
@@ -31,17 +32,39 @@ export class Signup {
     confirmPassword: ['', Validators.required],
   });
 
-  onSubmit(): void {
-    if (this.form.invalid) return;
+  async onSubmit(): Promise<void> {
+    if (this.form.invalid || this.loading) return;
     const { name, email, password, confirmPassword } = this.form.value;
+
     if (password !== confirmPassword) {
       this.error = 'Passwords do not match';
       return;
     }
-    if (this.auth.signup(name!, email!, password!)) {
+
+    this.error = '';
+    this.loading = true;
+    try {
+      await this.auth.signup(name!, email!, password!);
       this.router.navigate(['/home']);
-    } else {
-      this.error = 'Could not create account. Please try again.';
+    } catch (err) {
+      this.error = (err as Error).message;
+    } finally {
+      this.loading = false;
+    }
+  }
+    async googleLogin(): Promise<void> {
+    if (this.loading) return;
+    this.error = '';
+    this.loading = true;
+    try {
+      await this.auth.loginWithGoogle();
+      if (this.auth.isLoggedIn()) {
+        this.router.navigate([this.auth.isAdmin() ? '/admin' : '/home']);
+      }
+    } catch (err) {
+      this.error = (err as Error).message;
+    } finally {
+      this.loading = false;
     }
   }
 }

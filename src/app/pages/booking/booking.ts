@@ -14,8 +14,10 @@ import { Navbar } from '../../shared/layout/navbar';
 import { Footer } from '../../shared/layout/footer';
 import { AuthService } from '../../core/auth.service';
 import { TEACHERS, TIME_SLOTS } from '../../shared/mock-data';
+import { TeacherService } from '../../core/teacher.service';
 import { Teacher } from '../../shared/models';
 import { BookingSuccessDialog } from './booking-success-dialog';
+
 
 @Component({
   selector: 'app-booking',
@@ -32,16 +34,31 @@ export class Booking implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private dialog = inject(MatDialog);
+  private teacherService = inject(TeacherService);
 
   protected teacher: Teacher | undefined;
+  protected loading = true;
   protected timeSlots = TIME_SLOTS;
   protected selectedDate: Date | null = null;
   protected selectedSlot = '';
   protected message = '';
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('teacherId');
-    this.teacher = TEACHERS.find(t => t.id === id);
+      const id = this.route.snapshot.paramMap.get('teacherId');
+    if (!id) {
+      this.loading = false;
+      return;
+    }
+    this.teacherService.getTeacher(id).subscribe({
+      next: (teacher) => {
+        this.teacher = teacher;
+        this.loading = false;
+      },
+      error: () => {
+        this.teacher = undefined;
+        this.loading = false;
+      },
+    });
   }
 
   selectSlot(slot: string): void {

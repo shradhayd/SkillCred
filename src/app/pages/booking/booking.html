@@ -78,7 +78,7 @@
         >Confirm Booking</button>
       </aside>
     </div>
-  } @else {
+  }   @else if (!loading) {
     <div class="not-found card">
       <h2>Teacher not found</h2>
       <a routerLink="/browse-skills" mat-flat-button class="btn-primary">Browse Skills</a>

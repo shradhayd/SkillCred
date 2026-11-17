@@ -69,9 +69,16 @@
           </mat-card-actions>
         </mat-card>
       } @empty {
-        <div class="empty-state">
-          <mat-icon>search_off</mat-icon>
-          <p>No teachers found matching your filters.</p>
+               <div class="empty-state">
+          @if (loading) {
+            <p>Loading teachers...</p>
+          } @else if (loadError) {
+            <mat-icon>cloud_off</mat-icon>
+            <p>Could not load teachers. Please check that the backend is running.</p>
+          } @else {
+            <mat-icon>search_off</mat-icon>
+            <p>No teachers found matching your filters.</p>
+          }
         </div>
       }
     </div>

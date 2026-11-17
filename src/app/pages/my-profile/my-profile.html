@@ -54,8 +54,10 @@
               <span class="stars">{{ '⭐'.repeat(review.rating) }}</span>
               <small>{{ review.date }}</small>
             </div>
-            <p>{{ review.comment }}</p>
+                        <p>{{ review.comment }}</p>
           </div>
+        } @empty {
+          <p>No reviews yet.</p>
         }
       </div>
     </mat-tab>

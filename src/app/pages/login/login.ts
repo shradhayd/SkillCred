@@ -24,19 +24,41 @@ export class Login {
   private router = inject(Router);
 
   protected error = '';
+  protected loading = false;
 
   protected form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required],
   });
 
-  onSubmit(): void {
-    if (this.form.invalid) return;
+  async onSubmit(): Promise<void> {
+    if (this.form.invalid || this.loading) return;
     const { email, password } = this.form.value;
-    if (this.auth.login(email!, password!)) {
-      this.router.navigate(['/home']);
-    } else {
-      this.error = 'Invalid email or password. Try shradha@gmail.com / shradha1234';
+
+    this.error = '';
+    this.loading = true;
+    try {
+      await this.auth.login(email!, password!);
+      this.router.navigate([this.auth.isAdmin() ? '/admin' : '/home']);
+    } catch (err) {
+      this.error = (err as Error).message;
+    } finally {
+      this.loading = false;
+    }
+  }
+    async googleLogin(): Promise<void> {
+    if (this.loading) return;
+    this.error = '';
+    this.loading = true;
+    try {
+      await this.auth.loginWithGoogle();
+      if (this.auth.isLoggedIn()) {
+        this.router.navigate([this.auth.isAdmin() ? '/admin' : '/home']);
+      }
+    } catch (err) {
+      this.error = (err as Error).message;
+    } finally {
+      this.loading = false;
     }
   }
 }
