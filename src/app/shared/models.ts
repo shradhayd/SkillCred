@@ -55,6 +55,8 @@ export interface Transaction {
   withWhom: string;
   credits: number;
   status: 'completed' | 'pending' | 'cancelled';
+  bookingId?: string;
+  createdAt?: string;
 }
 
 export interface Session {
@@ -67,6 +69,8 @@ export interface Session {
   status: 'upcoming' | 'completed' | 'cancelled';
   credits: number;
   role: 'teacher' | 'student';
+  reviewed?: boolean;
+  message?: string;
 }
 
 export interface Review {

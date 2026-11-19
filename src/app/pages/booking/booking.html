@@ -17,7 +17,13 @@
           <h3>Select Date</h3>
           <mat-form-field appearance="outline">
             <mat-label>Choose a date</mat-label>
-            <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" />
+            <input
+              matInput
+              [matDatepicker]="picker"
+              [min]="minDate"
+              [(ngModel)]="selectedDate"
+              (dateChange)="onDateChange()"
+            />
             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
@@ -30,16 +36,21 @@
               <button
                 class="time-pill"
                 [class.selected]="selectedSlot === slot"
+                [disabled]="bookedSlots.includes(slot)"
+                [title]="bookedSlots.includes(slot) ? 'Already booked' : ''"
                 (click)="selectSlot(slot)"
               >{{ slot }}</button>
             }
           </div>
+          @if (bookedSlots.length) {
+            <p class="hint">Crossed-out times are already booked.</p>
+          }
         </div>
 
         <div class="card">
           <h3>Message (optional)</h3>
           <mat-form-field appearance="outline" class="full-width">
-            <textarea matInput rows="3" placeholder="Add a note for the teacher..." [(ngModel)]="message"></textarea>
+            <textarea matInput rows="3" maxlength="500" placeholder="Add a note for the teacher..." [(ngModel)]="message"></textarea>
           </mat-form-field>
         </div>
       </div>
@@ -58,6 +69,10 @@
           <span>Credits Required</span>
           <strong class="credits">{{ teacher.creditsRequired }} credits</strong>
         </div>
+        <div class="detail-item">
+          <span>Your Balance</span>
+          <strong>{{ auth.currentUser()?.credits ?? 0 }} credits</strong>
+        </div>
         @if (selectedDate) {
           <div class="detail-item">
             <span>Date</span>
@@ -70,15 +85,22 @@
             <strong>{{ selectedSlot }}</strong>
           </div>
         }
+        @if (isOwnProfile) {
+          <p class="hint warn">You cannot book your own session.</p>
+        } @else if (notEnoughCredits) {
+          <p class="hint warn">You need {{ teacher.creditsRequired }} credits but you have {{ auth.currentUser()?.credits ?? 0 }}.</p>
+        } @else {
+          <p class="hint">Credits are held safely and go to the teacher once you mark the session as completed.</p>
+        }
         <button
           mat-flat-button
           class="btn-primary confirm-btn"
-          [disabled]="!selectedDate || !selectedSlot"
+          [disabled]="!selectedDate || !selectedSlot || submitting || notEnoughCredits || isOwnProfile"
           (click)="confirmBooking()"
-        >Confirm Booking</button>
+        >{{ submitting ? 'Booking...' : 'Confirm Booking' }}</button>
       </aside>
     </div>
-  }   @else if (!loading) {
+  } @else if (!loading) {
     <div class="not-found card">
       <h2>Teacher not found</h2>
       <a routerLink="/browse-skills" mat-flat-button class="btn-primary">Browse Skills</a>

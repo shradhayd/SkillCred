@@ -109,6 +109,9 @@
   text-align: center;
   padding: 3rem;
 }
+.hint { font-size: 0.85rem; margin: 0.75rem 0 0; color: var(--text-muted); }
+.hint.warn { color: #e53e3e; }
+.time-pill:disabled { opacity: 0.4; cursor: not-allowed; text-decoration: line-through; }
 
 @media (max-width: 768px) {
   .booking-layout { flex-direction: column; }

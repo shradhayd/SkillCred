@@ -4,6 +4,9 @@
   <div class="balance-card gradient-hero card">
     <span class="balance-label">Current Balance</span>
     <span class="balance-amount">{{ auth.currentUser()?.credits }} credits</span>
+    @if (creditsOnHold > 0) {
+      <span class="balance-label">{{ creditsOnHold }} credits on hold for upcoming sessions</span>
+    }
   </div>
 
   <div class="stats-row">
@@ -51,9 +54,25 @@
             <strong>{{ tx.skill }}</strong>
             <span>{{ tx.date }} · {{ tx.withWhom }}</span>
           </div>
-          <span class="tx-credits" [class.earned]="tx.type === 'earned'" [class.spent]="tx.type === 'spent'">
+          <span class="status-badge" [class]="'status-' + tx.status">{{ tx.status }}</span>
+          <span
+            class="tx-credits"
+            [class.earned]="tx.type === 'earned'"
+            [class.spent]="tx.type === 'spent'"
+            [style.opacity]="tx.status === 'cancelled' ? 0.5 : 1"
+          >
             {{ tx.type === 'earned' ? '+' : '-' }}{{ tx.credits }}
           </span>
+        </div>
+      } @empty {
+        <div class="tx-row">
+          @if (loading) {
+            <span>Loading transactions...</span>
+          } @else if (loadError) {
+            <span>Could not load transactions. Please check that the backend is running.</span>
+          } @else {
+            <span>No transactions yet.</span>
+          }
         </div>
       }
     </div>

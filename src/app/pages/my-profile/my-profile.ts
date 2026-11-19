@@ -7,8 +7,8 @@ import { Navbar } from '../../shared/layout/navbar';
 import { Footer } from '../../shared/layout/footer';
 import { AuthService } from '../../core/auth.service';
 import { TeacherService } from '../../core/teacher.service';
-import { SESSIONS } from '../../shared/mock-data';
-import { Review } from '../../shared/models';
+import { BookingService } from '../../core/booking.service';
+import { Review, Session } from '../../shared/models';
 
 @Component({
   selector: 'app-my-profile',
@@ -19,11 +19,17 @@ import { Review } from '../../shared/models';
 export class MyProfile implements OnInit {
   protected auth = inject(AuthService);
   private teacherService = inject(TeacherService);
+  private bookingService = inject(BookingService);
 
   protected reviews: Review[] = [];
-  protected sessions = SESSIONS; // still demo data, becomes real in Step 5 (bookings)
+  protected sessions: Session[] = [];
 
   ngOnInit(): void {
+    this.bookingService.list().subscribe({
+      next: (sessions) => (this.sessions = sessions),
+      error: () => (this.sessions = []),
+    });
+
     const id = this.auth.currentUser()?.id;
     if (!id) return;
     this.teacherService.getReviews(id).subscribe({
