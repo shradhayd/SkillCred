@@ -9,8 +9,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../../core/auth.service';
 import { ChatService } from '../../core/chat.service';
 import { ThemeService } from '../../core/theme.service';
-import { NOTIFICATIONS } from '../mock-data';
-
+import { NotificationService } from '../../core/notification.service';
 @Component({
   selector: 'app-navbar',
   imports: [
@@ -46,9 +45,18 @@ export class Navbar {
     inject(DestroyRef).onDestroy(() => this.chatSub?.unsubscribe());
   }
 
-  protected notifications = NOTIFICATIONS;
-  protected unreadCount   = NOTIFICATIONS.filter(n => !n.read).length;
+  private   notifService = inject(NotificationService);
+  protected notifications = this.notifService.items;
+  protected unreadCount   = this.notifService.unread;
 
+  openNotification(n: { id: string; link: string; read: boolean }): void {
+    if (!n.read) this.notifService.markRead(n.id);
+    if (n.link) this.router.navigateByUrl(n.link);
+  }
+
+  markAllNotificationsRead(): void {
+    this.notifService.markAllRead();
+  }
   menuOpen = false;   // mobile drawer
   moreOpen = false;   // desktop "More" dropdown
 

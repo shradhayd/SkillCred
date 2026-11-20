@@ -69,9 +69,11 @@ export class Chat {
         },
       });
 
-    // Opened from a "Message" button: /chat?with=<userId>
-    const withId = this.route.snapshot.queryParamMap.get('with');
-    if (withId) {
+    // Opened from a "Message" button or a bell notification: /chat?with=<userId>.
+    // Subscribed (not a snapshot) so it also works when you are already on the chat page.
+    this.route.queryParamMap.pipe(takeUntilDestroyed()).subscribe((params) => {
+      const withId = params.get('with');
+      if (!withId) return;
       this.chat
         .open(withId)
         .then((id) => {
@@ -79,7 +81,7 @@ export class Chat {
           this.router.navigate([], { queryParams: {}, replaceUrl: true });
         })
         .catch((err) => this.error.set(apiErrorMessage(err)));
-    }
+    });
 
     // Always scroll to the newest message.
     effect(() => {

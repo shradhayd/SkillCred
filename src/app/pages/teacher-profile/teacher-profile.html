@@ -24,6 +24,11 @@
                     <a [routerLink]="['/chat']" [queryParams]="{ with: teacher.id }" mat-stroked-button class="book-btn">
             <mat-icon>chat</mat-icon> Message
           </a>
+                    @if (auth.isLoggedIn()) {
+            <button mat-button color="warn" class="book-btn" (click)="reportUser()">
+              <mat-icon>flag</mat-icon> Report
+            </button>
+          }
         }
       </div>
     </div>

@@ -113,20 +113,26 @@
       } @else {
 
         <!-- Notifications -->
+          <!-- Notifications -->
         <button mat-icon-button [matMenuTriggerFor]="notifMenu" class="notif-btn">
-          <mat-icon [matBadge]="unreadCount" matBadgeColor="warn" [matBadgeHidden]="unreadCount === 0">
+          <mat-icon [matBadge]="unreadCount()" matBadgeColor="warn" [matBadgeHidden]="unreadCount() === 0">
             notifications
           </mat-icon>
         </button>
         <mat-menu #notifMenu="matMenu" class="notif-menu">
-          @for (notif of notifications; track notif.id) {
-            <button mat-menu-item class="notif-item" [class.unread]="!notif.read">
+          @for (notif of notifications(); track notif.id) {
+            <button mat-menu-item class="notif-item" [class.unread]="!notif.read" (click)="openNotification(notif)">
               <div class="notif-content">
                 <strong>{{ notif.title }}</strong>
                 <span>{{ notif.message }}</span>
                 <small>{{ notif.time }}</small>
               </div>
             </button>
+          } @empty {
+            <button mat-menu-item disabled>No notifications yet</button>
+          }
+          @if (unreadCount() > 0) {
+            <button mat-menu-item (click)="markAllNotificationsRead()">Mark all as read</button>
           }
         </mat-menu>
 
