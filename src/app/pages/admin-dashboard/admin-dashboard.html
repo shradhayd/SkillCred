@@ -2,11 +2,8 @@
 
 <div class="ad-shell" [class.collapsed]="sidebarCollapsed()">
 
-  <!-- =====================================================
-       SIDEBAR
-  ===================================================== -->
+  <!-- SIDEBAR -->
   <aside class="ad-sidebar">
-
     <div class="ad-sidebar-top">
       <span class="ad-logo-icon">⚡</span>
       <span class="ad-logo-text">Admin Panel</span>
@@ -17,391 +14,230 @@
 
     <nav class="ad-nav">
       @for (item of navItems; track item.id) {
-        <button class="ad-nav-item" [class.active]="activeSection() === item.id" (click)="selectSection(item.id)">
+        <button class="ad-nav-item" [class.active]="activeId() === item.id" (click)="openSection(item.id)">
           <mat-icon class="ad-nav-icon">{{ item.icon }}</mat-icon>
           <span class="ad-nav-label">{{ item.label }}</span>
-          @if (item.id === 'reports' && openReportCount() > 0) {
-            <span class="ad-nav-badge">{{ openReportCount() }}</span>
+          @if (item.id === 'reports' && (stats()?.openReports ?? 0) > 0) {
+            <span class="ad-nav-badge">{{ stats()?.openReports }}</span>
+          }
+          @if (item.id === 'tickets' && (stats()?.openTickets ?? 0) > 0) {
+            <span class="ad-nav-badge">{{ stats()?.openTickets }}</span>
           }
         </button>
       }
     </nav>
 
     <div class="ad-sidebar-footer">
-      <img [src]="auth.currentUser()?.photo || 'https://i.pravatar.cc/150?u=shradha'" alt="Admin" class="ad-foot-av" />
+      <img [src]="auth.currentUser()?.photo || 'https://ui-avatars.com/api/?background=1D9E75&color=fff&name=A'" alt="Admin" class="ad-foot-av" />
       <div class="ad-foot-info">
         <strong>{{ auth.currentUser()?.name }}</strong>
-        <span>Super Admin</span>
+        <span>Admin</span>
       </div>
     </div>
-
   </aside>
 
-  <!-- =====================================================
-       MAIN
-  ===================================================== -->
+  <!-- MAIN -->
   <main class="ad-main">
 
-    <!-- Top bar -->
     <div class="ad-topbar">
       <div class="ad-topbar-left">
-        <h1>{{ activeLabel }}</h1>
-        <span class="ad-breadcrumb">Admin › {{ activeLabel }}</span>
+        <h1>{{ section().label }}</h1>
+        <span class="ad-breadcrumb">Admin › {{ section().label }}</span>
       </div>
       <div class="ad-topbar-right">
-        <span class="ad-topbar-date"><mat-icon>calendar_today</mat-icon> Aug 21, 2026</span>
-        <button mat-flat-button class="btn-primary ad-topbar-btn">
-          <mat-icon>add</mat-icon> Quick Action
+        <span class="ad-topbar-date"><mat-icon>calendar_today</mat-icon> {{ today | date:'mediumDate' }}</span>
+        <button mat-stroked-button class="ad-topbar-btn" (click)="refresh()">
+          <mat-icon>refresh</mat-icon> Refresh
         </button>
       </div>
     </div>
 
-    <!-- ===================================================
-         OVERVIEW
-    =================================================== -->
-    @if (activeSection() === 'overview') {
+    @if (error()) {
+      <div class="ad-error">{{ error() }}</div>
+    }
 
-      <div class="ad-stat-grid">
-        @for (card of statCards; track card.label) {
-          <div class="ad-stat-card" [attr.data-color]="card.color">
-            <div class="ad-stat-icon"><mat-icon>{{ card.icon }}</mat-icon></div>
-            <div class="ad-stat-body">
-              <span class="ad-stat-label">{{ card.label }}</span>
-              <span class="ad-stat-value">{{ card.value }}</span>
-              <span class="ad-stat-delta" [class.up]="card.up" [class.dn]="!card.up">
-                <mat-icon>{{ card.up ? 'trending_up' : 'trending_down' }}</mat-icon>
-                {{ card.delta }} this month
-              </span>
-            </div>
-          </div>
-        }
-      </div>
+    <!-- ================= OVERVIEW ================= -->
+    @if (activeId() === 'overview') {
 
-      <div class="ad-charts-row">
+      @if (loading() && !stats()) {
+        <p class="ad-note">Loading...</p>
+      }
 
-        <div class="ad-chart-card">
-          <div class="ad-chart-hdr">
-            <h3>User Growth</h3>
-            <span class="ad-chart-badge teal">+12% MoM</span>
-          </div>
-          <div class="ad-bar-chart">
-            @for (d of monthlyData; track d.month) {
-              <div class="ad-bar-col">
-                <div class="ad-bar-wrap">
-                  <div class="ad-bar teal-bar" [style.height.%]="(d.users / maxUsers) * 100" [title]="d.users.toString()">
-                    <span class="ad-bar-tip">{{ d.users }}</span>
-                  </div>
-                </div>
-                <span class="ad-bar-lbl">{{ d.month }}</span>
+      @if (stats(); as s) {
+        <div class="ad-stat-grid">
+          @for (card of statCards(); track card.label) {
+            <div class="ad-stat-card" [attr.data-color]="card.color">
+              <div class="ad-stat-icon"><mat-icon>{{ card.icon }}</mat-icon></div>
+              <div class="ad-stat-body">
+                <span class="ad-stat-label">{{ card.label }}</span>
+                <span class="ad-stat-value">{{ card.value }}</span>
+                <span class="ad-stat-sub">{{ card.sub }}</span>
               </div>
-            }
-          </div>
-        </div>
-
-        <div class="ad-chart-card">
-          <div class="ad-chart-hdr">
-            <h3>Sessions Completed</h3>
-            <span class="ad-chart-badge purple">+9% MoM</span>
-          </div>
-          <div class="ad-bar-chart">
-            @for (d of monthlyData; track d.month) {
-              <div class="ad-bar-col">
-                <div class="ad-bar-wrap">
-                  <div class="ad-bar purple-bar" [style.height.%]="(d.sessions / maxSessions) * 100" [title]="d.sessions.toString()">
-                    <span class="ad-bar-tip">{{ d.sessions }}</span>
-                  </div>
-                </div>
-                <span class="ad-bar-lbl">{{ d.month }}</span>
-              </div>
-            }
-          </div>
-        </div>
-
-      </div>
-
-      <div class="ad-bottom-row">
-
-        <div class="ad-panel">
-          <div class="ad-panel-hdr"><h3>Skills by Category</h3></div>
-          <div class="ad-cat-bars">
-            @for (cat of categoryStats; track cat.name) {
-              <div class="ad-cat-row">
-                <span class="ad-cat-icon">{{ cat.icon }}</span>
-                <span class="ad-cat-name">{{ cat.name }}</span>
-                <div class="ad-cat-track">
-                  <div class="ad-cat-fill" [attr.data-color]="cat.color" [style.width.%]="cat.pct"></div>
-                </div>
-                <span class="ad-cat-pct">{{ cat.pct }}%</span>
-              </div>
-            }
-          </div>
-        </div>
-
-        <div class="ad-panel">
-          <div class="ad-panel-hdr">
-            <h3>Recent Activity</h3>
-            <span class="ad-see-all">See all</span>
-          </div>
-          <div class="ad-feed">
-            @for (item of recentActivity; track item.msg) {
-              <div class="ad-feed-item">
-                <span class="ad-feed-dot" [attr.data-color]="item.color">
-                  <mat-icon>{{ item.icon }}</mat-icon>
-                </span>
-                <div class="ad-feed-text">
-                  <span class="ad-feed-msg">{{ item.msg }}</span>
-                  <span class="ad-feed-time">{{ item.time }}</span>
-                </div>
-              </div>
-            }
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Credit flow chart -->
-      <div class="ad-panel ad-credit-panel">
-        <div class="ad-panel-hdr">
-          <h3>Platform Credit Flow (Last 6 Months)</h3>
-          <span class="ad-chart-badge teal">All Users</span>
-        </div>
-        <div class="ad-bar-chart tall">
-          @for (d of chartData; track d.month) {
-            <div class="ad-bar-col">
-              <div class="ad-bar-wrap">
-                <div class="ad-bar teal-bar"   [style.height.%]="(d.earned / maxChart) * 100" [title]="'Earned: ' + d.earned"><span class="ad-bar-tip">{{ d.earned }}</span></div>
-                <div class="ad-bar purple-bar" [style.height.%]="(d.spent  / maxChart) * 100" [title]="'Spent: '  + d.spent" ><span class="ad-bar-tip">{{ d.spent  }}</span></div>
-              </div>
-              <span class="ad-bar-lbl">{{ d.month }}</span>
             </div>
           }
         </div>
-        <div class="ad-chart-legend">
-          <span class="ad-legend teal">  <span class="ad-legend-dot"></span> Credits Earned</span>
-          <span class="ad-legend purple"><span class="ad-legend-dot"></span> Credits Spent</span>
-        </div>
-      </div>
 
-    }
-
-    <!-- ===================================================
-         USERS
-    =================================================== -->
-    @if (activeSection() === 'users') {
-      <div class="ad-toolbar">
-        <mat-form-field appearance="outline" class="ad-search-field" subscriptSizing="dynamic">
-          <mat-icon matPrefix>search</mat-icon>
-          <input matInput [(ngModel)]="userSearch" placeholder="Search by name, email, or role…" />
-        </mat-form-field>
-        <button mat-flat-button class="btn-primary"><mat-icon>person_add</mat-icon> Add User</button>
-      </div>
-
-      <div class="ad-panel ad-no-pad">
-        <table class="ad-table">
-          <thead>
-            <tr><th>User</th><th>Email</th><th>Role</th><th>Status</th><th>Credits</th><th>Sessions</th><th>Joined</th><th>Actions</th></tr>
-          </thead>
-          <tbody>
-            @for (u of filteredUsers; track u.id) {
-              <tr>
-                <td>
-                  <div class="ad-user-cell">
-                    <img [src]="'https://i.pravatar.cc/40?u=' + u.id" [alt]="u.name" class="ad-av" />
-                    {{ u.name }}
-                  </div>
-                </td>
-                <td class="ad-muted">{{ u.email }}</td>
-                <td><span class="ad-role-badge" [attr.data-role]="u.role">{{ u.role }}</span></td>
-                <td>
-                  <span class="ad-status-pill" [attr.data-status]="u.status">
-                    <span class="ad-sdot"></span>{{ u.status }}
-                  </span>
-                </td>
-                <td><strong>{{ u.credits }}</strong></td>
-                <td class="ad-muted">{{ u.sessions }}</td>
-                <td class="ad-muted">{{ u.joined }}</td>
-                <td>
-                  <div class="ad-action-row">
-                    <button mat-icon-button title="View Profile"><mat-icon>visibility</mat-icon></button>
-                    <button mat-icon-button (click)="toggleSuspend(u.id)" [title]="u.status === 'suspended' ? 'Activate' : 'Suspend'">
-                      <mat-icon>{{ u.status === 'suspended' ? 'check_circle' : 'block' }}</mat-icon>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    }
-
-    <!-- ===================================================
-         SESSIONS
-    =================================================== -->
-    @if (activeSection() === 'sessions') {
-      <div class="ad-toolbar">
-        <span class="ad-toolbar-count">{{ mockSessions.length }} sessions total</span>
-        <button mat-stroked-button><mat-icon>download</mat-icon> Export CSV</button>
-      </div>
-
-      <div class="ad-panel ad-no-pad">
-        <table class="ad-table">
-          <thead>
-            <tr><th>Skill</th><th>Student</th><th>Teacher</th><th>Date</th><th>Time</th><th>Credits</th><th>Status</th></tr>
-          </thead>
-          <tbody>
-            @for (s of mockSessions; track s.skill + s.date) {
-              <tr>
-                <td><strong>{{ s.skill }}</strong></td>
-                <td>
-                  <div class="ad-user-cell">
-                    <img [src]="'https://i.pravatar.cc/40?u=' + s.student" [alt]="s.student" class="ad-av" />{{ s.student }}
-                  </div>
-                </td>
-                <td>
-                  <div class="ad-user-cell">
-                    <img [src]="'https://i.pravatar.cc/40?u=' + s.teacher" [alt]="s.teacher" class="ad-av" />{{ s.teacher }}
-                  </div>
-                </td>
-                <td class="ad-muted">{{ s.date }}</td>
-                <td class="ad-muted">{{ s.time }}</td>
-                <td><strong>{{ s.credits }}</strong></td>
-                <td><span class="ad-status-pill" [attr.data-status]="s.status"><span class="ad-sdot"></span>{{ s.status }}</span></td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    }
-
-    <!-- ===================================================
-         REPORTS
-    =================================================== -->
-    @if (activeSection() === 'reports') {
-      <div class="ad-toolbar">
-        <mat-form-field appearance="outline" class="ad-search-field" subscriptSizing="dynamic">
-          <mat-icon matPrefix>search</mat-icon>
-          <input matInput [(ngModel)]="reportSearch" placeholder="Search reports…" />
-        </mat-form-field>
-        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="ad-filter-sel">
-          <mat-select [(ngModel)]="reportFilter">
-            <mat-option value="all">All Status</mat-option>
-            <mat-option value="open">Open</mat-option>
-            <mat-option value="resolved">Resolved</mat-option>
-            <mat-option value="dismissed">Dismissed</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-
-      <div class="ad-report-summary">
-        <div class="ad-rchip open">    <mat-icon>flag</mat-icon>         {{ openReportCount() }}      Open</div>
-        <div class="ad-rchip resolved"><mat-icon>check_circle</mat-icon> {{ resolvedReportCount() }}  Resolved</div>
-        <div class="ad-rchip dimissed"><mat-icon>cancel</mat-icon>       {{ dismissedReportCount() }} Dismissed</div>
-      </div>
-
-      <div class="ad-panel ad-no-pad">
-        <table class="ad-table">
-          <thead>
-            <tr><th>Reporter</th><th>Reported User</th><th>Reason</th><th>Date</th><th>Status</th><th>Actions</th></tr>
-          </thead>
-          <tbody>
-            @for (r of filteredReports; track r.id) {
-              <tr>
-                <td>
-                  <div class="ad-user-cell">
-                    <img [src]="'https://i.pravatar.cc/40?u=' + r.reporter" [alt]="r.reporter" class="ad-av" />{{ r.reporter }}
-                  </div>
-                </td>
-                <td>
-                  <div class="ad-user-cell">
-                    <img [src]="'https://i.pravatar.cc/40?u=' + r.reportedUser" [alt]="r.reportedUser" class="ad-av" />{{ r.reportedUser }}
-                  </div>
-                </td>
-                <td class="ad-muted ad-reason">{{ r.reason }}</td>
-                <td class="ad-muted">{{ r.date }}</td>
-                <td><span class="ad-status-pill" [attr.data-status]="r.status"><span class="ad-sdot"></span>{{ r.status }}</span></td>
-                <td>
-                  @if (r.status === 'open') {
-                    <div class="ad-action-row">
-                      <button mat-stroked-button class="ad-sm-btn" (click)="resolveReport(r)"><mat-icon>check</mat-icon> Resolve</button>
-                      <button mat-stroked-button class="ad-sm-btn" (click)="dismissReport(r)"><mat-icon>close</mat-icon> Dismiss</button>
+        <div class="ad-charts-row">
+          <div class="ad-chart-card">
+            <div class="ad-chart-hdr"><h3>New Users (6 months)</h3></div>
+            <div class="ad-bar-chart">
+              @for (d of s.monthly; track d.month) {
+                <div class="ad-bar-col">
+                  <div class="ad-bar-wrap">
+                    <div class="ad-bar teal-bar" [style.height.%]="(d.users / maxUsers()) * 100" [title]="d.users.toString()">
+                      <span class="ad-bar-tip">{{ d.users }}</span>
                     </div>
-                  } @else {
-                    <span class="ad-muted">—</span>
-                  }
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    }
-
-    <!-- ===================================================
-         CATEGORIES
-    =================================================== -->
-    @if (activeSection() === 'categories') {
-      <div class="ad-toolbar">
-        <span class="ad-toolbar-count">{{ categoryStats.length }} active categories</span>
-        <button mat-flat-button class="btn-primary"><mat-icon>add</mat-icon> Add Category</button>
-      </div>
-
-      <div class="ad-cat-admin-grid">
-        @for (cat of categoryStats; track cat.name) {
-          <div class="ad-cat-admin-card ad-panel">
-            <div class="ad-cat-admin-icon">{{ cat.icon }}</div>
-            <h3>{{ cat.name }}</h3>
-            <div class="ad-cat-track ad-cat-admin-track">
-              <div class="ad-cat-fill" [attr.data-color]="cat.color" [style.width.%]="cat.pct"></div>
-            </div>
-            <p class="ad-cat-stat">{{ cat.pct }}% of all sessions</p>
-            <div class="ad-action-row">
-              <button mat-icon-button title="Edit"><mat-icon>edit</mat-icon></button>
-              <button mat-icon-button title="Delete"><mat-icon>delete</mat-icon></button>
+                  </div>
+                  <span class="ad-bar-lbl">{{ d.month }}</span>
+                </div>
+              }
             </div>
           </div>
+
+          <div class="ad-chart-card">
+            <div class="ad-chart-hdr"><h3>New Sessions Booked (6 months)</h3></div>
+            <div class="ad-bar-chart">
+              @for (d of s.monthly; track d.month) {
+                <div class="ad-bar-col">
+                  <div class="ad-bar-wrap">
+                    <div class="ad-bar purple-bar" [style.height.%]="(d.bookings / maxBookings()) * 100" [title]="d.bookings.toString()">
+                      <span class="ad-bar-tip">{{ d.bookings }}</span>
+                    </div>
+                  </div>
+                  <span class="ad-bar-lbl">{{ d.month }}</span>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="ad-bottom-row">
+          <div class="ad-panel">
+            <div class="ad-panel-hdr"><h3>Teachers by Category</h3></div>
+            <div class="ad-cat-bars">
+              @for (cat of s.categories; track cat.name; let i = $index) {
+                <div class="ad-cat-row">
+                  <span class="ad-cat-name">{{ cat.name }}</span>
+                  <div class="ad-cat-track">
+                    <div class="ad-cat-fill" [attr.data-color]="color(i)" [style.width.%]="(cat.teachers / maxTeachers()) * 100"></div>
+                  </div>
+                  <span class="ad-cat-pct">{{ cat.teachers }}</span>
+                </div>
+              } @empty {
+                <p class="ad-note">No teachers yet.</p>
+              }
+            </div>
+          </div>
+
+          <div class="ad-panel">
+            <div class="ad-panel-hdr">
+              <h3>Recent Admin Activity</h3>
+              <span class="ad-see-all" (click)="openSection('auditLogs')">See all</span>
+            </div>
+            <div class="ad-feed">
+              @for (log of recent(); track log['id']) {
+                <div class="ad-feed-item">
+                  <span class="ad-feed-dot" data-color="teal"><mat-icon>edit_note</mat-icon></span>
+                  <div class="ad-feed-text">
+                    <span class="ad-feed-msg">{{ activityText(log) }}</span>
+                    <span class="ad-feed-time">{{ log['createdAt'] | date:'medium' }}</span>
+                  </div>
+                </div>
+              } @empty {
+                <p class="ad-note">No admin actions yet.</p>
+              }
+            </div>
+          </div>
+        </div>
+      }
+
+    } @else {
+
+    <!-- ================= DATA SECTIONS ================= -->
+      <div class="ad-toolbar">
+        <mat-form-field appearance="outline" class="ad-search-field" subscriptSizing="dynamic">
+          <mat-icon matPrefix>search</mat-icon>
+          <input matInput [(ngModel)]="search" placeholder="Search the loaded {{ section().label.toLowerCase() }}…" />
+        </mat-form-field>
+        @if (section().canCreate) {
+          <button mat-flat-button class="btn-primary" (click)="openEditor(null)">
+            <mat-icon>add</mat-icon> Add {{ section().singular }}
+          </button>
         }
       </div>
-    }
 
-    <!-- ===================================================
-         SETTINGS
-    =================================================== -->
-    @if (activeSection() === 'settings') {
-      <div class="ad-settings-grid">
-
-        <div class="ad-panel">
-          <h3 class="ad-settings-title">Platform Settings</h3>
-          <div class="ad-settings-form">
-            <div class="ad-setting-row"><label>Platform Name</label><input type="text"   value="SkillCred"              class="ad-setting-input" /></div>
-            <div class="ad-setting-row"><label>Support Email</label><input type="email"  value="support@skillcred.com" class="ad-setting-input" /></div>
-            <div class="ad-setting-row"><label>Welcome Credits (new users)</label><input type="number" value="50"  class="ad-setting-input" /></div>
-            <div class="ad-setting-row"><label>Max Credits per Session</label><input     type="number" value="100" class="ad-setting-input" /></div>
-            <div class="ad-setting-row"><label>Cancellation Window (hours)</label><input type="number" value="24"  class="ad-setting-input" /></div>
-            <button mat-flat-button class="btn-primary ad-save-btn">Save Changes</button>
-          </div>
-        </div>
-
-        <div class="ad-panel">
-          <h3 class="ad-settings-title">Quick Stats</h3>
-          <div class="ad-quick-stats">
-            <div class="ad-qs-row"><span>Total Users</span>            <strong>1,247</strong></div>
-            <div class="ad-qs-row"><span>Active Teachers</span>        <strong>342</strong></div>
-            <div class="ad-qs-row"><span>Sessions This Month</span>    <strong>640</strong></div>
-            <div class="ad-qs-row"><span>Credits in Circulation</span> <strong>45,680</strong></div>
-            <div class="ad-qs-row"><span>Avg Session Rating</span>     <strong>4.7 ⭐</strong></div>
-            <div class="ad-qs-row"><span>Open Reports</span>           <strong>{{ openReportCount() }}</strong></div>
-          </div>
-
-          <h3 class="ad-settings-title" style="margin-top:1.75rem">Danger Zone</h3>
-          <p class="ad-danger-note">These actions are irreversible. Proceed with caution.</p>
-          <div class="ad-danger-actions">
-            <button mat-stroked-button color="warn"><mat-icon>pause_circle</mat-icon> Maintenance Mode</button>
-            <button mat-stroked-button color="warn"><mat-icon>download</mat-icon> Export All Data</button>
-          </div>
-        </div>
-
+      <div class="ad-panel ad-no-pad ad-scroll">
+        <table class="ad-table">
+          <thead>
+            <tr>
+              @for (col of section().columns; track col.label) {
+                <th>{{ col.label }}</th>
+              }
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of filteredRows(); track row['id']) {
+              <tr>
+                @for (col of section().columns; track col.label) {
+                  <td>
+                    @switch (col.kind) {
+                      @case ('user') {
+                        <div class="ad-user-cell">
+                          <img [src]="avatar(row)" [alt]="col.value(row)" class="ad-av" />{{ col.value(row) }}
+                        </div>
+                      }
+                      @case ('role') { <span class="ad-role-badge" [attr.data-role]="col.value(row)">{{ col.value(row) }}</span> }
+                      @case ('pill') {
+                        <span class="ad-status-pill" [attr.data-status]="col.value(row)"><span class="ad-sdot"></span>{{ col.value(row) }}</span>
+                      }
+                      @case ('strong') { <strong>{{ col.value(row) }}</strong> }
+                      @case ('muted') { <span class="ad-muted">{{ col.value(row) }}</span> }
+                      @default { {{ col.value(row) }} }
+                    }
+                  </td>
+                }
+                <td>
+                  <div class="ad-action-row">
+                    @if (section().id === 'users') {
+                      <button mat-icon-button (click)="toggleSuspend(row)" [title]="row['suspended'] ? 'Activate' : 'Suspend'">
+                        <mat-icon>{{ row['suspended'] ? 'check_circle' : 'block' }}</mat-icon>
+                      </button>
+                      <button mat-icon-button (click)="toggleAdmin(row)" [title]="row['isAdmin'] ? 'Remove admin' : 'Make admin'">
+                        <mat-icon>{{ row['isAdmin'] ? 'remove_moderator' : 'admin_panel_settings' }}</mat-icon>
+                      </button>
+                    }
+                    @if ((section().id === 'reports' || section().id === 'tickets') && row['status'] === 'open') {
+                      <button mat-stroked-button class="ad-sm-btn" (click)="setStatus(row, 'resolved')"><mat-icon>check</mat-icon> Resolve</button>
+                      <button mat-stroked-button class="ad-sm-btn" (click)="setStatus(row, 'dismissed')"><mat-icon>close</mat-icon> Dismiss</button>
+                    }
+                    @if (!section().readOnly) {
+                      <button mat-icon-button (click)="openEditor(row)" title="Edit"><mat-icon>edit</mat-icon></button>
+                      <button mat-icon-button (click)="remove(row)" title="Delete"><mat-icon>delete</mat-icon></button>
+                    } @else {
+                      <button mat-icon-button (click)="openEditor(row)" title="View"><mat-icon>visibility</mat-icon></button>
+                    }
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td [attr.colspan]="(section().columns?.length ?? 0) + 1" class="ad-note">
+                  @if (loading()) { Loading... } @else { Nothing here yet. }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
       </div>
+
+      @if (nextCursor()) {
+        <div class="ad-more">
+          <button mat-stroked-button [disabled]="loading()" (click)="load(true)">
+            {{ loading() ? 'Loading...' : 'Load more' }}
+          </button>
+        </div>
+      }
     }
 
   </main>

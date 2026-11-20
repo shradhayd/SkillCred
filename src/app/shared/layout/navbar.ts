@@ -1,12 +1,13 @@
-import { Component, Input, inject } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, DestroyRef, Input, effect, inject, signal } from '@angular/core';import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../../core/auth.service';
+import { ChatService } from '../../core/chat.service';
 import { ThemeService } from '../../core/theme.service';
 import { NOTIFICATIONS } from '../mock-data';
 
@@ -26,6 +27,24 @@ export class Navbar {
   protected auth = inject(AuthService);
   protected theme = inject(ThemeService);
   private   router = inject(Router);
+    private   chat = inject(ChatService);
+
+  /** Total unread chat messages, updated live. */
+  protected unreadMessages = signal(0);
+  private chatSub?: Subscription;
+
+  constructor() {
+    effect(() => {
+      this.chatSub?.unsubscribe();
+      this.unreadMessages.set(0);
+      if (!this.auth.isLoggedIn()) return;
+      this.chatSub = this.chat.threads().subscribe({
+        next: (threads) => this.unreadMessages.set(threads.reduce((sum, t) => sum + t.unread, 0)),
+        error: () => undefined,
+      });
+    });
+    inject(DestroyRef).onDestroy(() => this.chatSub?.unsubscribe());
+  }
 
   protected notifications = NOTIFICATIONS;
   protected unreadCount   = NOTIFICATIONS.filter(n => !n.read).length;
@@ -44,4 +63,4 @@ export class Navbar {
     this.auth.logout();
     this.router.navigate(['/home']);
   }
-}
+}

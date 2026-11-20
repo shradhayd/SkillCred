@@ -126,8 +126,8 @@ export class Booking implements OnInit {
     const ref = this.dialog.open(BookingSuccessDialog, { width: '400px' });
     ref.afterClosed().subscribe((action) => {
       if (action === 'chat') {
-        this.router.navigate(['/chat']);
-      } else {
+        this.router.navigate(['/chat'], { queryParams: { with: this.teacher?.id } });
+            } else {
         this.router.navigate(['/session-history']);
       }
     });

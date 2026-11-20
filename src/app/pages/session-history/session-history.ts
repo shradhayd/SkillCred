@@ -43,8 +43,7 @@ export class SessionHistory implements OnInit {
 
     ref.afterClosed().subscribe((action) => {
       if (action === 'message') {
-        this.router.navigate(['/chat']);
-      } else if (action === 'cancel') {
+        this.router.navigate(['/chat'], { queryParams: { with: session.withWhomId } });      } else if (action === 'cancel') {
         if (!confirm('Cancel this session? The student gets the held credits back.')) return;
         this.run(
           () => this.bookingService.cancel(session.id),

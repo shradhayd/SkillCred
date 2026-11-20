@@ -168,6 +168,8 @@ export class AuthService {
         return 'Password is too weak. Use at least 6 characters.';
       case 'auth/invalid-email':
         return 'Please enter a valid email address.';
+      case 'auth/user-disabled':
+        return 'This account has been suspended. Please contact support.';
       case 'auth/too-many-requests':
         return 'Too many attempts. Please wait a few minutes and try again.';
       case 'auth/network-request-failed':

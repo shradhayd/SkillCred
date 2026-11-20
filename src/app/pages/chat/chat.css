@@ -223,6 +223,8 @@
   font-size: 0.85rem;
   margin: 0;
 }
+.empty-note { padding: 1rem 1.25rem; color: var(--text-muted); font-size: 0.9rem; }
+.chat-error { color: #e53e3e; font-size: 0.85rem; margin: 0 1rem 0.5rem; }
 
 @media (max-width: 900px) {
   .chat-page { flex-direction: column; }

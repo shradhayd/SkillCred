@@ -41,6 +41,17 @@
           Wallet
         </a>
       }
+            @if (isLoggedIn) {
+        <a routerLink="/chat"
+           routerLinkActive="active"
+           [matBadge]="unreadMessages()"
+           [matBadgeHidden]="unreadMessages() === 0"
+           matBadgeSize="small"
+           matBadgeColor="warn"
+           (click)="menuOpen = false">
+          Messages
+        </a>
+      }
 
       <!-- MORE DROPDOWN (desktop) -->
       <div class="nav-more-wrap" (mouseenter)="moreOpen = true" (mouseleave)="moreOpen = false">
@@ -69,6 +80,7 @@
       <div class="nav-mobile-more">
         @if (isLoggedIn) {
           <a routerLink="/wallet" routerLinkActive="active" (click)="menuOpen = false">Wallet</a>
+                    <a routerLink="/chat" routerLinkActive="active" (click)="menuOpen = false">Messages @if (unreadMessages() > 0) { ({{ unreadMessages() }}) }</a>
         }
         <a routerLink="/about-us"         routerLinkActive="active" (click)="menuOpen = false">About Us</a>
         <a routerLink="/contact-us"       routerLinkActive="active" (click)="menuOpen = false">Contact Us</a>
@@ -131,6 +143,9 @@
           </button>
           <button mat-menu-item routerLink="/wallet">
             <mat-icon>account_balance_wallet</mat-icon> Wallet
+          </button>
+                    <button mat-menu-item routerLink="/chat">
+            <mat-icon>chat</mat-icon> Messages
           </button>
           <button mat-menu-item routerLink="/session-history">
             <mat-icon>history</mat-icon> Session History

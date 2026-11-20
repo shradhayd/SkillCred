@@ -21,6 +21,9 @@
           <a [routerLink]="['/booking', teacher.id]" mat-flat-button class="btn-primary book-btn">
             <mat-icon>event</mat-icon> Book a Session
           </a>
+                    <a [routerLink]="['/chat']" [queryParams]="{ with: teacher.id }" mat-stroked-button class="book-btn">
+            <mat-icon>chat</mat-icon> Message
+          </a>
         }
       </div>
     </div>

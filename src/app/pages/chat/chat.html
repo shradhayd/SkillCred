@@ -3,50 +3,73 @@
 <div class="chat-page">
   <aside class="conversations-sidebar card">
     <h3>Messages</h3>
-    @for (conv of conversations; track conv.id) {
+    @for (conv of threads(); track conv.id) {
       <div
         class="conv-item"
-        [class.active]="activeId === conv.id"
-        (click)="selectConversation(conv.id)"
+        [class.active]="activeId() === conv.id"
+        (click)="select(conv.id)"
       >
-        <img [src]="conv.photo" [alt]="conv.name" class="conv-photo" />
+        <img [src]="conv.photo || 'https://ui-avatars.com/api/?background=1D9E75&color=fff&name=' + conv.name" [alt]="conv.name" class="conv-photo" />
         <div class="conv-info">
           <div class="conv-header">
             <strong>{{ conv.name }}</strong>
-            <small>{{ conv.lastMessageTime }}</small>
+            @if (conv.lastMessageAt) {
+              <small>{{ conv.lastMessageAt | date:'shortTime' }}</small>
+            }
           </div>
-          <span class="conv-preview">{{ conv.lastMessage }}</span>
+          <span class="conv-preview">{{ conv.lastMessage || 'No messages yet' }}</span>
         </div>
-        @if (conv.unread > 0) {
+        @if (conv.unread > 0 && conv.id !== activeId()) {
           <span class="unread-badge">{{ conv.unread }}</span>
         }
       </div>
+    } @empty {
+      <p class="empty-note">
+        @if (loading()) { Loading chats... } @else { No chats yet. Open a teacher's profile and tap Message. }
+      </p>
     }
   </aside>
 
   <div class="chat-main" [class.with-editor]="showCodeEditor">
     <div class="chat-window card">
       <div class="chat-header">
-        <strong>{{ activeConversation?.name }}</strong>
+        <strong>{{ activeThread?.name || 'Select a chat' }}</strong>
         <button mat-stroked-button (click)="toggleCodeEditor()">
           <mat-icon>code</mat-icon> {{ showCodeEditor ? 'Close Editor' : 'Open Code Editor' }}
         </button>
       </div>
 
-      <div class="messages-area">
-        @for (msg of messages; track msg.id) {
+      <div class="messages-area" #messagesBox>
+        @for (msg of messages(); track msg.id) {
           <div class="message-bubble" [class.mine]="msg.isMine" [class.theirs]="!msg.isMine">
             <p>{{ msg.text }}</p>
-            <small>{{ msg.timestamp }}</small>
+            @if (msg.createdAt) {
+              <small>{{ msg.createdAt | date:'shortTime' }}</small>
+            }
           </div>
+        } @empty {
+          @if (activeId()) {
+            <p class="empty-note">No messages yet. Say hello!</p>
+          }
         }
       </div>
 
+      @if (error()) {
+        <p class="chat-error">{{ error() }}</p>
+      }
+
       <div class="chat-input">
         <mat-form-field appearance="outline" class="input-field">
-          <input matInput placeholder="Type a message..." [(ngModel)]="newMessage" (keyup.enter)="sendMessage()" />
+          <input
+            matInput
+            maxlength="1000"
+            placeholder="Type a message..."
+            [disabled]="!activeId()"
+            [(ngModel)]="newMessage"
+            (keyup.enter)="sendMessage()"
+          />
         </mat-form-field>
-        <button mat-flat-button class="btn-primary" (click)="sendMessage()">
+        <button mat-flat-button class="btn-primary" [disabled]="!activeId() || sending" (click)="sendMessage()">
           <mat-icon>send</mat-icon>
         </button>
       </div>
