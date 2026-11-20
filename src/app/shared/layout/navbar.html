@@ -138,8 +138,7 @@
 
         <!-- Profile avatar -->
         <button mat-icon-button [matMenuTriggerFor]="profileMenu" class="avatar-btn">
-          <img src="https://i.pravatar.cc/150?u=shradha" alt="Profile" class="avatar" />
-        </button>
+<img [src]="auth.currentUser()?.photo || 'https://ui-avatars.com/api/?background=1D9E75&color=fff&name=' + (auth.currentUser()?.name || 'U')" alt="Profile" class="avatar" />        </button>
         <mat-menu #profileMenu="matMenu">
           <button mat-menu-item routerLink="/dashboard">
             <mat-icon>space_dashboard</mat-icon> My Dashboard

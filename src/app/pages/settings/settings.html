@@ -7,10 +7,10 @@
     <h3>Profile Information</h3>
     <div class="photo-upload">
       <img [src]="auth.currentUser()?.photo" alt="Profile" class="profile-photo" />
-      <button mat-stroked-button>
-        <mat-icon>upload</mat-icon> Change Photo
+            <button mat-stroked-button [disabled]="uploadingPhoto" (click)="fileInput.click()">
+        <mat-icon>upload</mat-icon> {{ uploadingPhoto ? 'Uploading...' : 'Change Photo' }}
       </button>
-      <input type="file" hidden #fileInput accept="image/*" />
+      <input type="file" hidden #fileInput accept="image/jpeg,image/png,image/webp" (change)="onPhotoSelected($event)" />
     </div>
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Name</mat-label>

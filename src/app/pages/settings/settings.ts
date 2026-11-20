@@ -13,6 +13,7 @@ import { Footer } from '../../shared/layout/footer';
 import { AuthService } from '../../core/auth.service';
 import { TeacherService } from '../../core/teacher.service';
 import { SkillCategory } from '../../shared/models';
+import { UploadService } from '../../core/upload.service';
 
 type Level = 'Beginner' | 'Intermediate' | 'Advanced';
 
@@ -30,6 +31,9 @@ export class Settings implements OnInit {
   private router = inject(Router);
   private teacherService = inject(TeacherService);
   private snackBar = inject(MatSnackBar);
+  private uploads = inject(UploadService);
+
+  protected uploadingPhoto = false;
 
   protected categories: SkillCategory[] = [];
 
@@ -120,7 +124,23 @@ export class Settings implements OnInit {
     this.auth.logout();
     this.router.navigate(['/home']);
   }
+  /** Called when a file is chosen in the hidden file input. */
+  async onPhotoSelected(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = ''; // lets the user pick the same file again later
+    if (!file || this.uploadingPhoto) return;
 
+    this.uploadingPhoto = true;
+    try {
+      const url = await this.uploads.uploadAvatar(file);
+      await this.auth.saveProfile({ photo: url });
+      this.snackBar.open('Profile photo updated', 'OK', { duration: 3500 });
+    } catch (err) {
+      this.snackBar.open((err as Error).message, 'Close', { duration: 6000 });
+    }
+    this.uploadingPhoto = false;
+  }
   private async save(changes: Record<string, unknown>, successMessage: string): Promise<void> {
     try {
       await this.auth.saveProfile(changes);
