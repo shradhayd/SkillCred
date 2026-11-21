@@ -104,7 +104,7 @@
 .cu-faq-q mat-icon { flex-shrink:0;color:var(--text-muted);transition:transform .35s cubic-bezier(.22,1,.36,1),color .2s; }
 .cu-faq-item.open .cu-faq-q mat-icon { color:var(--primary-teal);transform:rotate(180deg); }
 .cu-faq-a { padding:0 0 1.25rem;font-size:.96rem;color:var(--text-muted);line-height:1.82;max-width:700px;animation:flipInX .4s cubic-bezier(.22,1,.36,1) both; }
-
+.cu-error { color: #e53e3e; font-size: 0.9rem; margin: 0 0 0.75rem; }
 /* ── RESPONSIVE ───────────────────────────────────────────── */
 @media (max-width:1024px) { .cu-layout { grid-template-columns:1fr; } .cu-aside { display:grid;grid-template-columns:1fr 1fr; } }
 @media (max-width:768px)  { .cu-slide-content h1 { font-size:2.1rem; } .cu-ch-div { display:none; } .cu-channels-inner { gap:1.5rem; } .cu-aside { grid-template-columns:1fr; } .cu-form-card { padding:2rem; } }

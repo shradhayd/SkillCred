@@ -62,7 +62,26 @@
       @if (loading() && !stats()) {
         <p class="ad-note">Loading...</p>
       }
-
+      @if (email(); as em) {
+        <div class="ad-email-card" [class.off]="!em.enabled">
+          <mat-icon>{{ em.enabled ? 'mark_email_read' : 'unsubscribe' }}</mat-icon>
+          <div class="ad-email-text">
+            <strong>Email service is {{ em.enabled ? 'ON' : 'OFF' }}</strong>
+            <span>
+              @if (!em.configured) {
+                EmailJS keys are not set in the backend, so no emails can be sent anyway.
+              } @else if (em.enabled) {
+                Booking, cancel and reminder emails are being sent. Sent this month: {{ em.sentThisMonth }} / {{ em.monthlyLimit }} (free plan).
+              } @else {
+                No emails are sent while this is OFF (contact tickets are still saved). Sent this month: {{ em.sentThisMonth }} / {{ em.monthlyLimit }}.
+              }
+            </span>
+          </div>
+          <mat-slide-toggle [checked]="em.enabled" [disabled]="emailBusy()" (change)="toggleEmails($event.checked)">
+            {{ em.enabled ? 'On' : 'Off' }}
+          </mat-slide-toggle>
+        </div>
+      }
       @if (stats(); as s) {
         <div class="ad-stat-grid">
           @for (card of statCards(); track card.label) {

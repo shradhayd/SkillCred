@@ -22,6 +22,12 @@ export interface AdminStats {
   categories: { name: string; teachers: number }[];
   monthly: { month: string; users: number; bookings: number }[];
 }
+export interface EmailStatus {
+  enabled: boolean;
+  configured: boolean;
+  sentThisMonth: number;
+  monthlyLimit: number;
+}
 
 /** Admin panel API (/api/admin/...). Only works for users who have the admin claim. */
 @Injectable({ providedIn: 'root' })
@@ -31,7 +37,13 @@ export class AdminService {
   stats(): Observable<AdminStats> {
     return this.api.get<AdminStats>('/admin/stats');
   }
+  emailStatus(): Observable<EmailStatus> {
+    return this.api.get<EmailStatus>('/admin/email-status');
+  }
 
+  setEmailsEnabled(enabled: boolean): Observable<{ enabled: boolean }> {
+    return this.api.post<{ enabled: boolean }>('/admin/email-status', { enabled });
+  }
   list(collection: string, options: { limit?: number; orderBy?: string; dir?: 'asc' | 'desc'; startAfter?: string } = {}): Observable<AdminList> {
     return this.api.get<AdminList>(`/admin/${collection}`, { limit: 25, ...options });
   }

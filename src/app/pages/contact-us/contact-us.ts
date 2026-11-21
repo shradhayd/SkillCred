@@ -9,6 +9,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { Navbar } from '../../shared/layout/navbar';
 import { Footer } from '../../shared/layout/footer';
 import { AuthService } from '../../core/auth.service';
+import { ApiService } from '../../core/api.service';
+import { apiErrorMessage } from '../../core/booking.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-contact-us',
@@ -23,6 +26,7 @@ import { AuthService } from '../../core/auth.service';
 })
 export class ContactUs implements OnInit, OnDestroy {
   protected auth = inject(AuthService);
+  private api = inject(ApiService);
 
   /* ── Hero slider ─────────────────────────────────── */
   heroSlides = [
@@ -62,6 +66,8 @@ export class ContactUs implements OnInit, OnDestroy {
   message  = '';
   submitted  = signal(false);
   ticketRef  = signal('');
+  sending    = signal(false);
+  sendError  = signal('');
 
   categories = [
     'General Inquiry',
@@ -109,14 +115,31 @@ export class ContactUs implements OnInit, OnDestroy {
   toggleFaq(i: number): void { this.openFaq = this.openFaq === i ? null : i; }
 
   /* ── Form ────────────────────────────────────────── */
-  submitForm(): void {
-    if (this.name && this.email && this.subject && this.message) {
-      this.ticketRef.set('SKC-' + Math.floor(10000 + Math.random() * 90000));
+  async submitForm(): Promise<void> {
+    if (!this.name || !this.email || !this.subject || !this.message || this.sending()) return;
+
+    this.sending.set(true);
+    this.sendError.set('');
+    try {
+      const res = await firstValueFrom(
+        this.api.post<{ ticketRef: string }>('/contact', {
+          name: this.name,
+          email: this.email,
+          category: this.category,
+          subject: this.subject,
+          message: this.message,
+        })
+      );
+      this.ticketRef.set(res.ticketRef);
       this.submitted.set(true);
+    } catch (err) {
+      this.sendError.set(apiErrorMessage(err));
     }
+    this.sending.set(false);
   }
   resetForm(): void {
     this.name = this.email = this.subject = this.category = this.message = '';
+    this.sendError.set('');
     this.submitted.set(false);
     this.ticketRef.set('');
   }

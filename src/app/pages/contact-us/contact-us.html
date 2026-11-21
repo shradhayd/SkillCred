@@ -91,8 +91,11 @@
           <textarea matInput [(ngModel)]="message" name="message" rows="5" placeholder="Tell us more..." required></textarea>
           <mat-hint>Be as detailed as possible — it helps us respond faster.</mat-hint>
         </mat-form-field>
-        <button mat-flat-button type="submit" class="btn-primary cu-submit-btn" [disabled]="!name||!email||!subject||!message">
-          <mat-icon>send</mat-icon> Send Message
+                @if (sendError()) {
+          <p class="cu-error">{{ sendError() }}</p>
+        }
+        <button mat-flat-button type="submit" class="btn-primary cu-submit-btn" [disabled]="!name||!email||!subject||!message||sending()">
+          <mat-icon>send</mat-icon> {{ sending() ? 'Sending...' : 'Send Message' }}
         </button>
       </form>
     } @else {

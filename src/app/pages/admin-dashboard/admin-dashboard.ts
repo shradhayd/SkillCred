@@ -6,11 +6,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { firstValueFrom } from 'rxjs';
 import { Navbar } from '../../shared/layout/navbar';
 import { AuthService } from '../../core/auth.service';
-import { AdminRow, AdminService, AdminStats } from '../../core/admin.service';
+import { AdminRow, AdminService, AdminStats, EmailStatus } from '../../core/admin.service';
 import { apiErrorMessage } from '../../core/booking.service';
 import { AdminDocDialog } from './admin-doc-dialog';
 
@@ -138,7 +139,7 @@ const COLORS = ['teal', 'purple', 'blue', 'coral', 'pink'];
 
 @Component({
   selector: 'app-admin-dashboard',
-  imports: [DatePipe, FormsModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, Navbar],
+  imports: [DatePipe, FormsModule,MatSlideToggleModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, Navbar],
   templateUrl: './admin-dashboard.html',
   styleUrl: './admin-dashboard.css',
 })
@@ -162,6 +163,8 @@ export class AdminDashboard {
 
   protected stats = signal<AdminStats | null>(null);
   protected recent = signal<AdminRow[]>([]);
+    protected email = signal<EmailStatus | null>(null);
+  protected emailBusy = signal(false);
 
   protected filteredRows = computed(() => {
     const q = this.search.trim().toLowerCase();
@@ -210,12 +213,14 @@ export class AdminDashboard {
   private async loadOverview(): Promise<void> {
     this.loading.set(true);
     try {
-      const [stats, recent] = await Promise.all([
+            const [stats, recent, email] = await Promise.all([
         firstValueFrom(this.admin.stats()),
         firstValueFrom(this.admin.list('auditLogs', { limit: 8 })),
+        firstValueFrom(this.admin.emailStatus()),
       ]);
       this.stats.set(stats);
       this.recent.set(recent.items);
+      this.email.set(email);
     } catch (err) {
       this.error.set(apiErrorMessage(err, 'Could not load the overview.'));
     }
@@ -241,7 +246,23 @@ export class AdminDashboard {
     }
     this.loading.set(false);
   }
+  // ---------- email kill-switch ----------
 
+  /** Turns the whole email service on or off. While OFF, the backend sends no emails at all. */
+  async toggleEmails(enabled: boolean): Promise<void> {
+    const current = this.email();
+    if (!current || this.emailBusy()) return;
+
+    this.emailBusy.set(true);
+    try {
+      await firstValueFrom(this.admin.setEmailsEnabled(enabled));
+      this.email.set({ ...current, enabled });
+      this.snackBar.open(enabled ? 'Emails are ON' : 'Emails are OFF. No email will be sent.', 'OK', { duration: 4000 });
+    } catch (err) {
+      this.snackBar.open(apiErrorMessage(err), 'Close', { duration: 6000 });
+    }
+    this.emailBusy.set(false);
+  }
   // ---------- create / edit / delete ----------
 
   openEditor(row: AdminRow | null): void {
