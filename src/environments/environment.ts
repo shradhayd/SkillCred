@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:5000/api',
+  apiUrl: 'https://skillcred-backend-t73z.onrender.com/api',
   firebase: {
     apiKey: "AIzaSyD6oe_K3S-BHrPGp7QqgjaZXVzoxRvSN_8",
     authDomain: "skillcred-minor.firebaseapp.com",
